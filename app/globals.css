@@ -1,0 +1,111 @@
+@import "tailwindcss";
+
+:root {
+  /* Surfaces — cool playmat / table light, not warm cream */
+  --background: #e8edf3;
+  --foreground: #12161f;
+  --surface: #f7f9fc;
+  --surface-elevated: #ffffff;
+
+  /* Brand / chrome */
+  --ink: #12161f;
+  --ink-soft: #2a3142;
+  --gold: #c4a035;
+  --gold-deep: #8f7420;
+
+  /* Mana — classic MTG-adjacent */
+  --mana-white: #f0e6a8;
+  --mana-blue: #0e68ab;
+  --mana-black: #3b3540;
+  --mana-red: #c23b2c;
+  --mana-green: #0f7a43;
+
+  --accent: var(--mana-blue);
+  --accent-soft: color-mix(in srgb, var(--mana-blue) 12%, transparent);
+  --success: var(--mana-green);
+  --danger: var(--mana-red);
+  --ring: color-mix(in srgb, var(--mana-blue) 28%, transparent);
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-surface: var(--surface);
+  --color-ink: var(--ink);
+  --color-gold: var(--gold);
+  --color-gold-deep: var(--gold-deep);
+  --color-mana-white: var(--mana-white);
+  --color-mana-blue: var(--mana-blue);
+  --color-mana-black: var(--mana-black);
+  --color-mana-red: var(--mana-red);
+  --color-mana-green: var(--mana-green);
+  --color-accent: var(--accent);
+  --font-sans: var(--font-body);
+  --font-mono: var(--font-geist-mono);
+}
+
+body {
+  background-color: var(--background);
+  background-image:
+    radial-gradient(ellipse 80% 50% at 0% -10%, rgba(240, 230, 168, 0.35), transparent 55%),
+    radial-gradient(ellipse 70% 45% at 100% 0%, rgba(14, 104, 171, 0.14), transparent 50%),
+    radial-gradient(ellipse 55% 40% at 85% 100%, rgba(194, 59, 44, 0.08), transparent 45%),
+    radial-gradient(ellipse 50% 35% at 10% 90%, rgba(15, 122, 67, 0.1), transparent 45%),
+    linear-gradient(180deg, #eef2f7 0%, #e4eaF1 48%, #dfe6ef 100%);
+  background-attachment: fixed;
+  color: var(--foreground);
+  font-family: var(--font-body), ui-sans-serif, system-ui, sans-serif;
+  min-height: 100%;
+}
+
+@layer base {
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+}
+
+/* Five-color mana ribbon — used under header / heroes */
+.mana-ribbon {
+  height: 3px;
+  width: 100%;
+  background: linear-gradient(
+    90deg,
+    var(--mana-white) 0%,
+    var(--mana-blue) 20%,
+    var(--mana-black) 40%,
+    var(--mana-red) 60%,
+    var(--mana-green) 80%,
+    var(--gold) 100%
+  );
+}
+
+.mana-dots {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.mana-dots span {
+  display: block;
+  width: 0.45rem;
+  height: 0.45rem;
+  border-radius: 9999px;
+  box-shadow: inset 0 0 0 1px rgba(18, 22, 31, 0.12);
+}
+
+.mana-dots .w {
+  background: var(--mana-white);
+}
+.mana-dots .u {
+  background: var(--mana-blue);
+}
+.mana-dots .b {
+  background: var(--mana-black);
+}
+.mana-dots .r {
+  background: var(--mana-red);
+}
+.mana-dots .g {
+  background: var(--mana-green);
+}

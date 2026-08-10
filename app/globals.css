@@ -49,10 +49,13 @@
 body {
   background-color: var(--background);
   background-image:
+    /* Mana-colored corner glows */
     radial-gradient(ellipse 80% 50% at 0% -10%, rgba(245, 236, 192, 0.12), transparent 55%),
     radial-gradient(ellipse 70% 45% at 100% 0%, rgba(26, 140, 219, 0.15), transparent 50%),
     radial-gradient(ellipse 55% 40% at 85% 100%, rgba(224, 69, 53, 0.1), transparent 45%),
     radial-gradient(ellipse 50% 35% at 10% 90%, rgba(26, 153, 85, 0.12), transparent 45%),
+    /* MTG-inspired geometric pattern */
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 80 80'%3E%3Cg fill='none' stroke='%23ffffff' stroke-width='0.5' opacity='0.03'%3E%3C!-- Center diamond --%3E%3Cpath d='M40 10 L70 40 L40 70 L10 40 Z'/%3E%3C!-- Inner diamond --%3E%3Cpath d='M40 20 L60 40 L40 60 L20 40 Z'/%3E%3C!-- Corner accents --%3E%3Ccircle cx='40' cy='10' r='2'/%3E%3Ccircle cx='70' cy='40' r='2'/%3E%3Ccircle cx='40' cy='70' r='2'/%3E%3Ccircle cx='10' cy='40' r='2'/%3E%3C!-- Center ornament --%3E%3Ccircle cx='40' cy='40' r='4'/%3E%3Ccircle cx='40' cy='40' r='8'/%3E%3C!-- Diagonal lines --%3E%3Cpath d='M0 0 L20 20 M60 60 L80 80 M80 0 L60 20 M20 60 L0 80'/%3E%3C/g%3E%3C/svg%3E"),
     linear-gradient(180deg, #12171f 0%, #0f1218 48%, #0d1015 100%);
   background-attachment: fixed;
   color: var(--foreground);

@@ -33,8 +33,8 @@ export function DesktopNavigation() {
             className={cn(
               "rounded-full px-3 py-1.5 text-sm font-medium transition-colors",
               isActive
-                ? "bg-ink text-white shadow-sm"
-                : "bg-transparent text-ink/70 hover:bg-white/70 hover:text-ink",
+                ? "bg-accent text-white shadow-sm"
+                : "bg-transparent text-ink/70 hover:bg-surface-elevated hover:text-ink",
             )}
           >
             {item.label}

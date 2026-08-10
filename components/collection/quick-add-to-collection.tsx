@@ -79,13 +79,13 @@ export function QuickAddToCollection({ card }: QuickAddToCollectionProps) {
   }
 
   return (
-    <div className="relative space-y-3 overflow-hidden rounded-2xl bg-ink p-4 text-white shadow-[0_18px_40px_-24px_rgba(18,22,31,0.65)]">
+    <div className="relative space-y-3 overflow-hidden rounded-2xl bg-surface-elevated p-4 text-ink shadow-[0_18px_40px_-24px_rgba(0,0,0,0.7)] ring-1 ring-ink/15">
       <div className="mana-ribbon absolute inset-x-0 top-0 opacity-90" aria-hidden />
       <div>
         <p className="text-xs font-medium uppercase tracking-[0.14em] text-gold">
           {t("quickAdd.title")}
         </p>
-        <p className="mt-1 text-sm text-white/65">{t("quickAdd.description")}</p>
+        <p className="mt-1 text-sm text-ink-soft">{t("quickAdd.description")}</p>
       </div>
 
       <div className="flex flex-col gap-2 sm:flex-row sm:flex-wrap">
@@ -99,11 +99,11 @@ export function QuickAddToCollection({ card }: QuickAddToCollectionProps) {
               type="button"
               disabled={isPending}
               onClick={() => quickAdd(finish)}
-              className="inline-flex flex-1 items-center justify-center gap-2 rounded-full bg-white px-4 py-3 text-sm font-semibold text-ink transition hover:bg-mana-white disabled:cursor-not-allowed disabled:opacity-60 sm:flex-none"
+              className="inline-flex flex-1 items-center justify-center gap-2 rounded-full bg-accent px-4 py-3 text-sm font-semibold text-white transition hover:bg-accent/85 disabled:cursor-not-allowed disabled:opacity-60 sm:flex-none"
             >
               {busy ? t("quickAdd.adding") : `+ ${finishLabel(finish)}`}
               {!busy ? (
-                <span className="font-medium text-ink/50">
+                <span className="font-medium text-white/70">
                   {formatEuroPrice(price, locale)}
                 </span>
               ) : null}
@@ -113,13 +113,13 @@ export function QuickAddToCollection({ card }: QuickAddToCollectionProps) {
       </div>
 
       {message ? (
-        <p className="rounded-xl bg-mana-green/25 px-3 py-2 text-sm text-emerald-100 ring-1 ring-mana-green/50">
+        <p className="rounded-xl bg-mana-green/20 px-3 py-2 text-sm text-mana-green ring-1 ring-mana-green/40">
           {message}
         </p>
       ) : null}
 
       {error ? (
-        <p className="rounded-xl bg-mana-red/25 px-3 py-2 text-sm text-rose-100 ring-1 ring-mana-red/50">
+        <p className="rounded-xl bg-mana-red/20 px-3 py-2 text-sm text-mana-red ring-1 ring-mana-red/40">
           {error}
         </p>
       ) : null}

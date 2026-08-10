@@ -29,11 +29,11 @@ export function CompareCardList({
     <section className="space-y-3">
       <div>
         <h2 className="text-base font-semibold text-ink">{title}</h2>
-        {hint ? <p className="mt-1 text-sm text-ink/60">{hint}</p> : null}
+        {hint ? <p className="mt-1 text-sm text-ink-soft">{hint}</p> : null}
       </div>
 
       {cards.length === 0 ? (
-        <p className="rounded-2xl bg-white/70 px-4 py-6 text-sm text-ink/55 ring-1 ring-ink/8">
+        <p className="rounded-2xl bg-surface/80 px-4 py-6 text-sm text-ink-soft ring-1 ring-ink/10">
           {emptyLabel}
         </p>
       ) : (
@@ -41,9 +41,9 @@ export function CompareCardList({
           {cards.map((card) => (
             <li
               key={card.scryfallId}
-              className="flex gap-3 rounded-2xl bg-white/90 p-3 ring-1 ring-ink/8"
+              className="flex gap-3 rounded-2xl bg-surface-elevated p-3 ring-1 ring-ink/10"
             >
-              <div className="relative h-24 w-16 shrink-0 overflow-hidden rounded-lg bg-zinc-100">
+              <div className="relative h-24 w-16 shrink-0 overflow-hidden rounded-lg bg-surface">
                 {card.image ? (
                   <CardImage
                     src={card.image}
@@ -59,30 +59,30 @@ export function CompareCardList({
                   <p className="truncate text-sm font-semibold text-ink">
                     {card.name}
                   </p>
-                  <p className="truncate text-xs text-ink/50">
+                  <p className="truncate text-xs text-ink-soft">
                     {card.setCode} · #{card.collectorNumber}
                   </p>
                 </div>
                 <div className="flex flex-wrap gap-2 text-[11px] font-medium">
-                  <span className="rounded-full bg-ink/5 px-2 py-0.5 text-ink/70">
+                  <span className="rounded-full bg-ink/10 px-2 py-0.5 text-ink-soft">
                     {t("friends.theirQty", { count: card.friendQuantity })}
                   </span>
-                  <span className="rounded-full bg-ink/5 px-2 py-0.5 text-ink/70">
+                  <span className="rounded-full bg-ink/10 px-2 py-0.5 text-ink-soft">
                     {t("friends.yourQty", { count: card.myQuantity })}
                   </span>
                   {emphasizeExtras && card.friendExtras > 0 ? (
-                    <span className="rounded-full bg-mana-green/15 px-2 py-0.5 text-mana-green">
+                    <span className="rounded-full bg-mana-green/20 px-2 py-0.5 text-mana-green">
                       {t("friends.extrasBadge", { count: card.friendExtras })}
                     </span>
                   ) : null}
                 </div>
                 <div className="flex items-center justify-between gap-2 pt-1">
-                  <p className="text-xs font-semibold text-ink">
+                  <p className="text-xs font-semibold text-gold">
                     {formatEuroPrice(card.currentPrice, locale)}
                   </p>
                   <Link
                     href={`/cards/${card.scryfallId}`}
-                    className="text-xs font-semibold text-mana-blue hover:text-mana-blue/80"
+                    className="text-xs font-semibold text-accent hover:text-accent/80"
                   >
                     {t("friends.viewCard")}
                   </Link>

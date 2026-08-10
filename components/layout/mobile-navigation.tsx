@@ -38,8 +38,8 @@ export function MobileNavigation() {
                 className={cn(
                   "flex flex-col items-center rounded-lg px-1 py-2 text-[11px] font-medium transition-colors",
                   isActive
-                    ? "bg-ink text-white"
-                    : "bg-transparent text-ink/70 hover:bg-white/80 hover:text-ink",
+                    ? "bg-accent text-white"
+                    : "bg-transparent text-ink/70 hover:bg-surface-elevated hover:text-ink",
                 )}
               >
                 {item.label}

@@ -38,7 +38,7 @@ export default async function HomePage() {
 
   return (
     <div className="space-y-8">
-      <section className="relative max-w-2xl space-y-4 overflow-hidden rounded-3xl border border-ink/8 bg-white/55 p-6 shadow-[0_20px_50px_-32px_rgba(18,22,31,0.45)] backdrop-blur-sm sm:p-8">
+      <section className="relative max-w-2xl space-y-4 overflow-hidden rounded-3xl border border-ink/15 bg-surface/80 p-6 shadow-[0_20px_50px_-32px_rgba(0,0,0,0.7)] backdrop-blur-sm sm:p-8">
         <div
           className="pointer-events-none absolute inset-x-0 top-0 h-1 mana-ribbon opacity-90"
           aria-hidden
@@ -66,21 +66,21 @@ export default async function HomePage() {
         <div className="flex flex-wrap gap-3 pt-2">
           <Link
             href="/search"
-            className="inline-flex items-center justify-center rounded-full bg-ink px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-ink/90"
+            className="inline-flex items-center justify-center rounded-full bg-accent px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-accent/85"
           >
             {t("home.searchCards")}
           </Link>
           {session?.user ? (
             <Link
               href="/collection"
-              className="inline-flex items-center justify-center rounded-full border border-ink/20 bg-white/80 px-5 py-2.5 text-sm font-semibold text-ink transition hover:border-mana-blue/40 hover:bg-white"
+              className="inline-flex items-center justify-center rounded-full border border-ink/25 bg-surface-elevated px-5 py-2.5 text-sm font-semibold text-ink transition hover:border-accent/50 hover:bg-surface-elevated/80"
             >
               {t("home.viewCollection")}
             </Link>
           ) : (
             <Link
               href="/auth/sign-up"
-              className="inline-flex items-center justify-center rounded-full border border-ink/20 bg-white/80 px-5 py-2.5 text-sm font-semibold text-ink transition hover:border-mana-blue/40 hover:bg-white"
+              className="inline-flex items-center justify-center rounded-full border border-ink/25 bg-surface-elevated px-5 py-2.5 text-sm font-semibold text-ink transition hover:border-accent/50 hover:bg-surface-elevated/80"
             >
               {t("home.createAccount")}
             </Link>
@@ -120,9 +120,9 @@ export default async function HomePage() {
           ].map((stat) => (
             <div
               key={stat.label}
-              className={`rounded-2xl border-l-4 bg-white/80 px-4 py-4 ring-1 ring-ink/5 ${stat.accent}`}
+              className={`rounded-2xl border-l-4 bg-surface-elevated/90 px-4 py-4 ring-1 ring-ink/10 ${stat.accent}`}
             >
-              <p className="text-xs font-medium uppercase tracking-[0.14em] text-ink/45">
+              <p className="text-xs font-medium uppercase tracking-[0.14em] text-ink-soft">
                 {stat.label}
               </p>
               <p className="mt-2 text-lg font-semibold text-ink">{stat.value}</p>
@@ -151,10 +151,10 @@ export default async function HomePage() {
           <Link
             key={item.title}
             href={item.href}
-            className={`rounded-2xl bg-white/70 p-5 ring-1 ring-ink/5 transition hover:bg-white ${item.tint}`}
+            className={`rounded-2xl bg-surface/80 p-5 ring-1 ring-ink/10 transition hover:bg-surface-elevated ${item.tint}`}
           >
             <h2 className="text-sm font-semibold text-ink">{item.title}</h2>
-            <p className="mt-2 text-sm leading-relaxed text-ink/60">{item.body}</p>
+            <p className="mt-2 text-sm leading-relaxed text-ink-soft">{item.body}</p>
           </Link>
         ))}
       </section>

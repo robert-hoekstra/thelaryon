@@ -1,37 +1,39 @@
 @import "tailwindcss";
 
 :root {
-  /* Surfaces — cool playmat / table light, not warm cream */
-  --background: #e8edf3;
-  --foreground: #12161f;
-  --surface: #f7f9fc;
-  --surface-elevated: #ffffff;
+  /* Surfaces — deep, immersive dark playmat */
+  --background: #0f1218;
+  --foreground: #e8ecf2;
+  --surface: #1a1f2a;
+  --surface-elevated: #242b38;
 
   /* Brand / chrome */
-  --ink: #12161f;
-  --ink-soft: #2a3142;
-  --gold: #c4a035;
-  --gold-deep: #8f7420;
+  --ink: #e8ecf2;
+  --ink-soft: #b8c0d0;
+  --gold: #e4b940;
+  --gold-deep: #d4a830;
 
-  /* Mana — classic MTG-adjacent */
-  --mana-white: #f0e6a8;
-  --mana-blue: #0e68ab;
-  --mana-black: #3b3540;
-  --mana-red: #c23b2c;
-  --mana-green: #0f7a43;
+  /* Mana — vivid, saturated MTG colors */
+  --mana-white: #f5ecc0;
+  --mana-blue: #1a8cdb;
+  --mana-black: #4a4255;
+  --mana-red: #e04535;
+  --mana-green: #1a9955;
 
   --accent: var(--mana-blue);
-  --accent-soft: color-mix(in srgb, var(--mana-blue) 12%, transparent);
+  --accent-soft: color-mix(in srgb, var(--mana-blue) 20%, transparent);
   --success: var(--mana-green);
   --danger: var(--mana-red);
-  --ring: color-mix(in srgb, var(--mana-blue) 28%, transparent);
+  --ring: color-mix(in srgb, var(--mana-blue) 35%, transparent);
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-surface: var(--surface);
+  --color-surface-elevated: var(--surface-elevated);
   --color-ink: var(--ink);
+  --color-ink-soft: var(--ink-soft);
   --color-gold: var(--gold);
   --color-gold-deep: var(--gold-deep);
   --color-mana-white: var(--mana-white);
@@ -47,11 +49,11 @@
 body {
   background-color: var(--background);
   background-image:
-    radial-gradient(ellipse 80% 50% at 0% -10%, rgba(240, 230, 168, 0.35), transparent 55%),
-    radial-gradient(ellipse 70% 45% at 100% 0%, rgba(14, 104, 171, 0.14), transparent 50%),
-    radial-gradient(ellipse 55% 40% at 85% 100%, rgba(194, 59, 44, 0.08), transparent 45%),
-    radial-gradient(ellipse 50% 35% at 10% 90%, rgba(15, 122, 67, 0.1), transparent 45%),
-    linear-gradient(180deg, #eef2f7 0%, #e4eaF1 48%, #dfe6ef 100%);
+    radial-gradient(ellipse 80% 50% at 0% -10%, rgba(245, 236, 192, 0.12), transparent 55%),
+    radial-gradient(ellipse 70% 45% at 100% 0%, rgba(26, 140, 219, 0.15), transparent 50%),
+    radial-gradient(ellipse 55% 40% at 85% 100%, rgba(224, 69, 53, 0.1), transparent 45%),
+    radial-gradient(ellipse 50% 35% at 10% 90%, rgba(26, 153, 85, 0.12), transparent 45%),
+    linear-gradient(180deg, #12171f 0%, #0f1218 48%, #0d1015 100%);
   background-attachment: fixed;
   color: var(--foreground);
   font-family: var(--font-body), ui-sans-serif, system-ui, sans-serif;

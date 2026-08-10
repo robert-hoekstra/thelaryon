@@ -111,10 +111,10 @@ export function CollectionItemCard({ item }: CollectionItemCardProps) {
   }
 
   return (
-    <article className="flex flex-col overflow-hidden rounded-2xl bg-white shadow-[0_1px_0_rgba(24,24,27,0.04),0_12px_30px_-18px_rgba(24,24,27,0.35)] ring-1 ring-ink/8">
+    <article className="flex flex-col overflow-hidden rounded-2xl bg-surface-elevated shadow-[0_1px_0_rgba(0,0,0,0.15),0_12px_30px_-18px_rgba(0,0,0,0.6)] ring-1 ring-ink/10">
       <Link
         href={`/cards/${item.scryfallId}`}
-        className="relative aspect-[5/7] bg-zinc-100"
+        className="relative aspect-[5/7] bg-surface"
       >
         {imageSrc ? (
           <CardImage
@@ -125,7 +125,7 @@ export function CollectionItemCard({ item }: CollectionItemCardProps) {
             className="object-cover"
           />
         ) : (
-          <div className="flex h-full items-center justify-center px-4 text-center text-sm text-zinc-500">
+          <div className="flex h-full items-center justify-center px-4 text-center text-sm text-ink-soft">
             {t("collectionItem.noImage")}
           </div>
         )}
@@ -133,10 +133,10 @@ export function CollectionItemCard({ item }: CollectionItemCardProps) {
 
       <div className="flex flex-1 flex-col gap-3 p-3">
         <div>
-          <h2 className="line-clamp-2 text-sm font-semibold text-zinc-900">
+          <h2 className="line-clamp-2 text-sm font-semibold text-ink">
             {item.name}
           </h2>
-          <p className="mt-1 text-xs text-zinc-500">
+          <p className="mt-1 text-xs text-ink-soft">
             {item.setName} · {item.setCode} · #{item.collectorNumber}
           </p>
         </div>
@@ -144,7 +144,7 @@ export function CollectionItemCard({ item }: CollectionItemCardProps) {
         {isEditing ? (
           <form onSubmit={handleSave} className="space-y-3">
             <label className="block space-y-1 text-xs">
-              <span className="font-medium uppercase tracking-[0.12em] text-zinc-400">
+              <span className="font-medium uppercase tracking-[0.12em] text-ink-soft">
                 {t("collectionItem.quantity")}
               </span>
               <input
@@ -153,12 +153,12 @@ export function CollectionItemCard({ item }: CollectionItemCardProps) {
                 max={999}
                 value={quantity}
                 onChange={(event) => setQuantity(Number(event.target.value))}
-                className="w-full rounded-lg border border-zinc-300 px-2 py-1.5 text-sm text-zinc-900 outline-none focus:border-mana-blue"
+                className="w-full rounded-lg border border-ink/20 bg-surface px-2 py-1.5 text-sm text-ink outline-none focus:border-accent"
               />
             </label>
 
             <label className="block space-y-1 text-xs">
-              <span className="font-medium uppercase tracking-[0.12em] text-zinc-400">
+              <span className="font-medium uppercase tracking-[0.12em] text-ink-soft">
                 {t("collectionItem.condition")}
               </span>
               <select
@@ -166,7 +166,7 @@ export function CollectionItemCard({ item }: CollectionItemCardProps) {
                 onChange={(event) =>
                   setCondition(event.target.value as CardCondition)
                 }
-                className="w-full rounded-lg border border-zinc-300 px-2 py-1.5 text-sm text-zinc-900 outline-none focus:border-mana-blue"
+                className="w-full rounded-lg border border-ink/20 bg-surface px-2 py-1.5 text-sm text-ink outline-none focus:border-accent"
               >
                 {CONDITIONS.map((option) => (
                   <option key={option.value} value={option.value}>
@@ -177,7 +177,7 @@ export function CollectionItemCard({ item }: CollectionItemCardProps) {
             </label>
 
             <label className="block space-y-1 text-xs">
-              <span className="font-medium uppercase tracking-[0.12em] text-zinc-400">
+              <span className="font-medium uppercase tracking-[0.12em] text-ink-soft">
                 {t("collectionItem.finish")}
               </span>
               <select
@@ -185,7 +185,7 @@ export function CollectionItemCard({ item }: CollectionItemCardProps) {
                 onChange={(event) =>
                   setFinish(event.target.value as CardFinish)
                 }
-                className="w-full rounded-lg border border-zinc-300 px-2 py-1.5 text-sm text-zinc-900 outline-none focus:border-mana-blue"
+                className="w-full rounded-lg border border-ink/20 bg-surface px-2 py-1.5 text-sm text-ink outline-none focus:border-accent"
               >
                 {finishes.map((option) => (
                   <option key={option.value} value={option.value}>
@@ -196,7 +196,7 @@ export function CollectionItemCard({ item }: CollectionItemCardProps) {
             </label>
 
             <label className="block space-y-1 text-xs">
-              <span className="font-medium uppercase tracking-[0.12em] text-zinc-400">
+              <span className="font-medium uppercase tracking-[0.12em] text-ink-soft">
                 {t("collectionItem.purchasePrice")}
               </span>
               <input
@@ -206,7 +206,7 @@ export function CollectionItemCard({ item }: CollectionItemCardProps) {
                 value={purchasePrice}
                 onChange={(event) => setPurchasePrice(event.target.value)}
                 placeholder={t("collectionItem.optional")}
-                className="w-full rounded-lg border border-zinc-300 px-2 py-1.5 text-sm text-zinc-900 outline-none focus:border-mana-blue"
+                className="w-full rounded-lg border border-ink/20 bg-surface px-2 py-1.5 text-sm text-ink outline-none placeholder:text-ink-soft focus:border-accent"
               />
             </label>
 
@@ -214,7 +214,7 @@ export function CollectionItemCard({ item }: CollectionItemCardProps) {
               <button
                 type="submit"
                 disabled={isPending}
-                className="flex-1 rounded-full bg-ink px-3 py-2 text-xs font-semibold text-white transition hover:bg-ink/90 disabled:opacity-60"
+                className="flex-1 rounded-full bg-accent px-3 py-2 text-xs font-semibold text-white transition hover:bg-accent/85 disabled:opacity-60"
               >
                 {isPending
                   ? t("collectionItem.saving")
@@ -235,7 +235,7 @@ export function CollectionItemCard({ item }: CollectionItemCardProps) {
                       : "",
                   )
                 }}
-                className="rounded-full border border-zinc-300 bg-white px-3 py-2 text-xs font-semibold text-zinc-800 transition hover:bg-zinc-50 disabled:opacity-60"
+                className="rounded-full border border-ink/25 bg-surface px-3 py-2 text-xs font-semibold text-ink transition hover:bg-surface-elevated disabled:opacity-60"
               >
                 {t("collectionItem.cancel")}
               </button>
@@ -243,36 +243,36 @@ export function CollectionItemCard({ item }: CollectionItemCardProps) {
           </form>
         ) : (
           <>
-            <dl className="grid grid-cols-2 gap-2 text-xs text-zinc-600">
+            <dl className="grid grid-cols-2 gap-2 text-xs text-ink-soft">
               <div>
-                <dt className="uppercase tracking-[0.12em] text-zinc-400">
+                <dt className="uppercase tracking-[0.12em] text-ink-soft/70">
                   {t("collectionItem.qty")}
                 </dt>
-                <dd className="mt-0.5 font-medium text-zinc-800">
+                <dd className="mt-0.5 font-medium text-ink">
                   {item.quantity}
                 </dd>
               </div>
               <div>
-                <dt className="uppercase tracking-[0.12em] text-zinc-400">
+                <dt className="uppercase tracking-[0.12em] text-ink-soft/70">
                   {t("collectionItem.price")}
                 </dt>
-                <dd className="mt-0.5 font-medium text-zinc-800">
+                <dd className="mt-0.5 font-medium text-gold">
                   {formatEuroPrice(item.currentPrice, locale)}
                 </dd>
               </div>
               <div>
-                <dt className="uppercase tracking-[0.12em] text-zinc-400">
+                <dt className="uppercase tracking-[0.12em] text-ink-soft/70">
                   {t("collectionItem.condition")}
                 </dt>
-                <dd className="mt-0.5 font-medium capitalize text-zinc-800">
+                <dd className="mt-0.5 font-medium capitalize text-ink">
                   {formatLabel(item.condition)}
                 </dd>
               </div>
               <div>
-                <dt className="uppercase tracking-[0.12em] text-zinc-400">
+                <dt className="uppercase tracking-[0.12em] text-ink-soft/70">
                   {t("collectionItem.finish")}
                 </dt>
-                <dd className="mt-0.5 font-medium capitalize text-zinc-800">
+                <dd className="mt-0.5 font-medium capitalize text-ink">
                   {formatLabel(item.finish)}
                 </dd>
               </div>
@@ -287,7 +287,7 @@ export function CollectionItemCard({ item }: CollectionItemCardProps) {
                   setMessage(null)
                 }}
                 disabled={isPending}
-                className="flex-1 rounded-full bg-ink px-3 py-2 text-xs font-semibold text-white transition hover:bg-ink/90 disabled:opacity-60"
+                className="flex-1 rounded-full bg-accent px-3 py-2 text-xs font-semibold text-white transition hover:bg-accent/85 disabled:opacity-60"
               >
                 {t("collectionItem.edit")}
               </button>
@@ -295,7 +295,7 @@ export function CollectionItemCard({ item }: CollectionItemCardProps) {
                 type="button"
                 onClick={handleDelete}
                 disabled={isPending}
-                className="rounded-full border border-zinc-300 bg-white px-3 py-2 text-xs font-semibold text-zinc-800 transition hover:bg-zinc-50 disabled:opacity-60"
+                className="rounded-full border border-ink/25 bg-surface px-3 py-2 text-xs font-semibold text-ink transition hover:bg-surface-elevated disabled:opacity-60"
               >
                 {isPending
                   ? t("collectionItem.deleting")
@@ -312,7 +312,7 @@ export function CollectionItemCard({ item }: CollectionItemCardProps) {
         ) : null}
 
         {error ? (
-          <p className="rounded-lg bg-rose-50 px-2 py-1.5 text-xs text-rose-800 ring-1 ring-rose-200">
+          <p className="rounded-lg bg-mana-red/15 px-2 py-1.5 text-xs text-mana-red ring-1 ring-mana-red/30">
             {error}
           </p>
         ) : null}

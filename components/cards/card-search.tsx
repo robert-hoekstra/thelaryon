@@ -94,9 +94,9 @@ export function CardSearch({
           onChange={(event) => setQuery(event.target.value)}
           placeholder={t("search.placeholder")}
           autoComplete="off"
-          className="w-full rounded-2xl border border-ink/15 bg-white/90 px-4 py-3.5 text-base text-ink shadow-sm outline-none transition placeholder:text-ink/35 focus:border-mana-blue focus:ring-4 focus:ring-mana-blue/15"
+          className="w-full rounded-2xl border border-ink/20 bg-surface-elevated px-4 py-3.5 text-base text-ink shadow-sm outline-none transition placeholder:text-ink-soft focus:border-accent focus:ring-4 focus:ring-accent/25"
         />
-        <p className="text-sm text-zinc-500">{t("search.hint")}</p>
+        <p className="text-sm text-ink-soft">{t("search.hint")}</p>
       </div>
 
       {state.status === "idle" ? (
@@ -107,10 +107,10 @@ export function CardSearch({
       ) : null}
 
       {state.status === "loading" ? (
-        <div className="flex items-center gap-3 rounded-2xl bg-white/70 px-4 py-5 text-sm text-zinc-600 ring-1 ring-ink/8">
+        <div className="flex items-center gap-3 rounded-2xl bg-surface/80 px-4 py-5 text-sm text-ink-soft ring-1 ring-ink/10">
           <span
             aria-hidden
-            className="h-4 w-4 animate-spin rounded-full border-2 border-zinc-300 border-t-mana-blue"
+            className="h-4 w-4 animate-spin rounded-full border-2 border-ink/30 border-t-accent"
           />
           {t("search.loading", { query: state.query })}
         </div>
@@ -133,7 +133,7 @@ export function CardSearch({
 
       {state.status === "success" && state.cards.length > 0 ? (
         <div className="space-y-3">
-          <p className="text-sm text-zinc-500">
+          <p className="text-sm text-ink-soft">
             {state.cards.length === 1
               ? t("search.resultsOne", { query: state.query })
               : t("search.resultsMany", {
@@ -165,15 +165,15 @@ function EmptyState({
     <div
       className={
         tone === "error"
-          ? "rounded-2xl bg-rose-50 px-5 py-8 text-center ring-1 ring-rose-200"
-          : "rounded-2xl bg-white/70 px-5 py-8 text-center ring-1 ring-ink/8"
+          ? "rounded-2xl bg-mana-red/15 px-5 py-8 text-center ring-1 ring-mana-red/30"
+          : "rounded-2xl bg-surface/80 px-5 py-8 text-center ring-1 ring-ink/10"
       }
     >
       <h2
         className={
           tone === "error"
-            ? "text-base font-semibold text-rose-900"
-            : "text-base font-semibold text-zinc-900"
+            ? "text-base font-semibold text-mana-red"
+            : "text-base font-semibold text-ink"
         }
       >
         {title}
@@ -181,8 +181,8 @@ function EmptyState({
       <p
         className={
           tone === "error"
-            ? "mt-2 text-sm text-rose-700"
-            : "mt-2 text-sm text-zinc-600"
+            ? "mt-2 text-sm text-mana-red/80"
+            : "mt-2 text-sm text-ink-soft"
         }
       >
         {description}

@@ -7,11 +7,14 @@ import { useLocale } from "@/components/i18n/locale-provider"
 import type { Locale } from "@/lib/i18n/config"
 import { cn } from "@/lib/utils"
 
-const options: { value: Locale; labelKey: "profile.languageEn" | "profile.languageNl" }[] =
-  [
-    { value: "en", labelKey: "profile.languageEn" },
-    { value: "nl", labelKey: "profile.languageNl" },
-  ]
+const options: {
+  value: Locale
+  flag: string
+  labelKey: "profile.languageEn" | "profile.languageNl"
+}[] = [
+  { value: "en", flag: "🇬🇧", labelKey: "profile.languageEn" },
+  { value: "nl", flag: "🇳🇱", labelKey: "profile.languageNl" },
+]
 
 type LanguageSwitcherProps = {
   compact?: boolean
@@ -33,7 +36,7 @@ export function LanguageSwitcher({ compact = false }: LanguageSwitcherProps) {
       <div
         role="group"
         aria-label={t("nav.language")}
-        className="flex items-center rounded-full bg-surface-elevated p-0.5 text-[11px] font-semibold ring-1 ring-ink/15"
+        className="flex items-center gap-0.5 rounded-full bg-surface-elevated p-0.5 ring-1 ring-ink/15"
       >
         {options.map((option) => (
           <button
@@ -41,14 +44,15 @@ export function LanguageSwitcher({ compact = false }: LanguageSwitcherProps) {
             type="button"
             disabled={isPending}
             onClick={() => select(option.value)}
+            aria-label={t(option.labelKey)}
             className={cn(
-              "rounded-full px-2 py-1 uppercase transition",
+              "rounded-full px-1.5 py-1 text-base transition",
               locale === option.value
-                ? "bg-accent text-white"
-                : "text-ink-soft hover:text-ink",
+                ? "bg-accent/20 ring-1 ring-accent/40"
+                : "opacity-60 hover:opacity-100",
             )}
           >
-            {option.value}
+            {option.flag}
           </button>
         ))}
       </div>
@@ -69,12 +73,13 @@ export function LanguageSwitcher({ compact = false }: LanguageSwitcherProps) {
             disabled={isPending}
             onClick={() => select(option.value)}
             className={cn(
-              "inline-flex items-center justify-center rounded-full px-4 py-2 text-sm font-semibold transition disabled:opacity-60",
+              "inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-semibold transition disabled:opacity-60",
               locale === option.value
                 ? "bg-accent text-white"
                 : "border border-ink/20 bg-surface text-ink hover:border-accent/40",
             )}
           >
+            <span className="text-lg">{option.flag}</span>
             {t(option.labelKey)}
           </button>
         ))}

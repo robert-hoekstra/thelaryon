@@ -45,10 +45,10 @@ export default async function FriendComparePage({ params }: ComparePageProps) {
         <h1 className="font-[family-name:var(--font-display)] text-3xl tracking-tight text-ink">
           {t("friends.title")}
         </h1>
-        <p className="text-sm text-ink/60">{t("friends.compareForbidden")}</p>
+        <p className="text-sm text-ink-soft">{t("friends.compareForbidden")}</p>
         <Link
           href="/friends"
-          className="inline-flex rounded-full bg-ink px-5 py-2.5 text-sm font-semibold text-white"
+          className="inline-flex rounded-full bg-accent px-5 py-2.5 text-sm font-semibold text-white"
         >
           {t("friends.compareBack")}
         </Link>
@@ -61,14 +61,14 @@ export default async function FriendComparePage({ params }: ComparePageProps) {
       <div className="space-y-3">
         <Link
           href="/friends"
-          className="inline-flex text-sm font-medium text-mana-blue hover:text-mana-blue/80"
+          className="inline-flex text-sm font-medium text-accent hover:text-accent/80"
         >
           {t("friends.compareBack")}
         </Link>
         <h1 className="font-[family-name:var(--font-display)] text-3xl tracking-tight text-ink">
           {t("friends.compareTitle", { name: comparison.friend.name })}
         </h1>
-        <p className="text-sm text-ink/55">{comparison.friend.email}</p>
+        <p className="text-sm text-ink-soft">{comparison.friend.email}</p>
       </div>
 
       <section className="grid gap-3 sm:grid-cols-3">
@@ -91,9 +91,9 @@ export default async function FriendComparePage({ params }: ComparePageProps) {
         ].map((stat) => (
           <div
             key={stat.label}
-            className={`rounded-2xl border-l-4 bg-white/80 px-4 py-4 ring-1 ring-ink/8 ${stat.accent}`}
+            className={`rounded-2xl border-l-4 bg-surface-elevated/90 px-4 py-4 ring-1 ring-ink/10 ${stat.accent}`}
           >
-            <p className="text-xs font-medium uppercase tracking-[0.14em] text-ink/45">
+            <p className="text-xs font-medium uppercase tracking-[0.14em] text-ink-soft">
               {stat.label}
             </p>
             <p className="mt-2 text-lg font-semibold text-ink">{stat.value}</p>

@@ -37,13 +37,13 @@ export default async function FriendsPage() {
         <h1 className="font-[family-name:var(--font-display)] text-3xl tracking-tight text-ink">
           {t("friends.title")}
         </h1>
-        <p className="max-w-2xl text-sm leading-relaxed text-ink/60">
+        <p className="max-w-2xl text-sm leading-relaxed text-ink-soft">
           {t("friends.description")}
         </p>
       </div>
 
       {incomingCount > 0 ? (
-        <div className="rounded-2xl border border-mana-blue/25 bg-mana-blue/10 px-4 py-3 text-sm font-medium text-ink ring-1 ring-mana-blue/15">
+        <div className="rounded-2xl border border-accent/25 bg-accent/15 px-4 py-3 text-sm font-medium text-ink ring-1 ring-accent/20">
           {t("friends.incomingBanner", { count: incomingCount })}
         </div>
       ) : null}
@@ -51,8 +51,8 @@ export default async function FriendsPage() {
       <FriendshipList friendships={friendships} />
       <AddFriendForm />
 
-      <p className="text-sm text-ink/50">
-        <Link href="/collection" className="font-medium text-mana-blue">
+      <p className="text-sm text-ink-soft">
+        <Link href="/collection" className="font-medium text-accent">
           {t("profile.toCollection")}
         </Link>
       </p>

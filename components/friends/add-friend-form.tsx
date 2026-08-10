@@ -31,33 +31,33 @@ export function AddFriendForm() {
   return (
     <form
       onSubmit={handleSubmit}
-      className="space-y-4 rounded-2xl bg-white/90 p-5 ring-1 ring-ink/8"
+      className="space-y-4 rounded-2xl bg-surface-elevated p-5 ring-1 ring-ink/15"
     >
       <div>
         <h2 className="text-base font-semibold text-ink">{t("friends.addTitle")}</h2>
-        <p className="mt-1 text-sm text-ink/60">{t("friends.addHint")}</p>
+        <p className="mt-1 text-sm text-ink-soft">{t("friends.addHint")}</p>
       </div>
 
       <label className="block space-y-1.5 text-sm">
-        <span className="font-medium text-ink/80">{t("friends.email")}</span>
+        <span className="font-medium text-ink">{t("friends.email")}</span>
         <input
           type="email"
           value={email}
           onChange={(event) => setEmail(event.target.value)}
           required
           autoComplete="email"
-          className="w-full rounded-xl border border-ink/15 bg-white px-3 py-2 text-ink outline-none focus:border-mana-blue focus:ring-4 focus:ring-mana-blue/15"
+          className="w-full rounded-xl border border-ink/20 bg-surface px-3 py-2 text-ink outline-none placeholder:text-ink-soft focus:border-accent focus:ring-4 focus:ring-accent/25"
         />
       </label>
 
       {message ? (
-        <p className="rounded-xl bg-mana-green/10 px-3 py-2 text-sm text-mana-green ring-1 ring-mana-green/30">
+        <p className="rounded-xl bg-mana-green/15 px-3 py-2 text-sm text-mana-green ring-1 ring-mana-green/30">
           {message}
         </p>
       ) : null}
 
       {error ? (
-        <p className="rounded-xl bg-rose-50 px-3 py-2 text-sm text-rose-800 ring-1 ring-rose-200">
+        <p className="rounded-xl bg-mana-red/15 px-3 py-2 text-sm text-mana-red ring-1 ring-mana-red/30">
           {error}
         </p>
       ) : null}
@@ -65,7 +65,7 @@ export function AddFriendForm() {
       <button
         type="submit"
         disabled={isPending}
-        className="inline-flex items-center justify-center rounded-full bg-ink px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-ink/90 disabled:opacity-60"
+        className="inline-flex items-center justify-center rounded-full bg-accent px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-accent/85 disabled:opacity-60"
       >
         {isPending ? t("friends.sending") : t("friends.sendRequest")}
       </button>

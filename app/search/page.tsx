@@ -28,7 +28,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
         <h1 className="font-[family-name:var(--font-display)] text-3xl tracking-tight text-ink">
           {t("search.title")}
         </h1>
-        <p className="max-w-2xl text-sm leading-relaxed text-ink/60">
+        <p className="max-w-2xl text-sm leading-relaxed text-ink-soft">
           {t("search.description")}
         </p>
       </div>

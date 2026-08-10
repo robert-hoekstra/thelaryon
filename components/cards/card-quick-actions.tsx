@@ -82,7 +82,7 @@ export function CardQuickActions({
     return (
       <Link
         href="/auth/sign-in"
-        className="mt-2 inline-flex w-full items-center justify-center rounded-full border border-zinc-300 bg-white px-2 py-1.5 text-[11px] font-semibold text-zinc-800 transition hover:bg-zinc-50"
+        className="mt-2 inline-flex w-full items-center justify-center rounded-full border border-ink/25 bg-surface px-2 py-1.5 text-[11px] font-semibold text-ink transition hover:bg-surface-elevated"
       >
         {t("quickAdd.signInToAdd")}
       </Link>
@@ -106,7 +106,7 @@ export function CardQuickActions({
                 quickAdd(finish)
               }}
               className={cn(
-                "inline-flex flex-1 items-center justify-center rounded-full bg-ink px-2 py-1.5 text-[11px] font-semibold text-white transition hover:bg-ink/90 disabled:cursor-not-allowed disabled:opacity-60",
+                "inline-flex flex-1 items-center justify-center rounded-full bg-accent px-2 py-1.5 text-[11px] font-semibold text-white transition hover:bg-accent/85 disabled:cursor-not-allowed disabled:opacity-60",
                 finishes.length === 1 && "w-full",
               )}
             >
@@ -123,13 +123,13 @@ export function CardQuickActions({
       </div>
 
       {feedback === "ok" ? (
-        <p className="text-[11px] font-medium text-mana-blue">
+        <p className="text-[11px] font-medium text-mana-green">
           {t("quickAdd.addedCompact")}
         </p>
       ) : null}
 
       {feedback === "error" ? (
-        <p className="text-[11px] font-medium text-rose-700">
+        <p className="text-[11px] font-medium text-mana-red">
           {t("quickAdd.failedCompact")}
         </p>
       ) : null}

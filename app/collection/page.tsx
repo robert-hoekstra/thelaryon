@@ -45,13 +45,13 @@ export default async function CollectionPage() {
           <h1 className="font-[family-name:var(--font-display)] text-3xl tracking-tight text-ink">
             {t("collection.title")}
           </h1>
-          <p className="max-w-2xl text-sm leading-relaxed text-ink/60">
+          <p className="max-w-2xl text-sm leading-relaxed text-ink-soft">
             {t("collection.description")}
           </p>
         </div>
         <Link
           href="/search"
-          className="inline-flex items-center justify-center rounded-full bg-ink px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-ink/90"
+          className="inline-flex items-center justify-center rounded-full bg-accent px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-accent/85"
         >
           {t("collection.searchCards")}
         </Link>
@@ -86,12 +86,12 @@ export default async function CollectionPage() {
         ].map((stat) => (
           <div
             key={stat.label}
-            className="rounded-2xl bg-white/80 px-4 py-4 ring-1 ring-ink/8"
+            className="rounded-2xl bg-surface-elevated/90 px-4 py-4 ring-1 ring-ink/10"
           >
-            <p className="text-xs font-medium uppercase tracking-[0.14em] text-zinc-500">
+            <p className="text-xs font-medium uppercase tracking-[0.14em] text-ink-soft">
               {stat.label}
             </p>
-            <p className="mt-2 text-lg font-semibold text-zinc-900">
+            <p className="mt-2 text-lg font-semibold text-ink">
               {stat.value}
             </p>
           </div>
@@ -99,17 +99,17 @@ export default async function CollectionPage() {
       </div>
 
       {items.length === 0 ? (
-        <div className="rounded-2xl bg-white/70 px-5 py-10 text-center ring-1 ring-ink/8">
-          <h2 className="text-base font-semibold text-zinc-900">
+        <div className="rounded-2xl bg-surface/80 px-5 py-10 text-center ring-1 ring-ink/10">
+          <h2 className="text-base font-semibold text-ink">
             {t("collection.emptyTitle")}
           </h2>
-          <p className="mt-2 text-sm text-zinc-600">
+          <p className="mt-2 text-sm text-ink-soft">
             {t("collection.emptyDescription")}
           </p>
           <div className="mt-5 flex flex-wrap justify-center gap-3">
             <Link
               href="/search"
-              className="inline-flex items-center justify-center rounded-full bg-ink px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-ink/90"
+              className="inline-flex items-center justify-center rounded-full bg-accent px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-accent/85"
             >
               {t("collection.searchCards")}
             </Link>

@@ -84,21 +84,21 @@ export function AddToCollectionForm({ card }: AddToCollectionFormProps) {
   }
 
   return (
-    <div className="rounded-2xl bg-white ring-1 ring-ink/8">
+    <div className="rounded-2xl bg-surface-elevated ring-1 ring-ink/15">
       <button
         type="button"
         onClick={() => setOpen((value) => !value)}
         className="flex w-full items-center justify-between gap-3 px-5 py-4 text-left"
       >
         <div>
-          <h2 className="text-base font-semibold text-zinc-900">
+          <h2 className="text-base font-semibold text-ink">
             {t("customAdd.title")}
           </h2>
-          <p className="mt-1 text-sm text-zinc-600">
+          <p className="mt-1 text-sm text-ink-soft">
             {t("customAdd.description")}
           </p>
         </div>
-        <span className="text-sm font-semibold text-mana-blue">
+        <span className="text-sm font-semibold text-accent">
           {open ? t("customAdd.close") : t("customAdd.open")}
         </span>
       </button>
@@ -106,11 +106,11 @@ export function AddToCollectionForm({ card }: AddToCollectionFormProps) {
       {open ? (
         <form
           onSubmit={handleSubmit}
-          className="space-y-4 border-t border-zinc-200 px-5 py-5"
+          className="space-y-4 border-t border-ink/15 px-5 py-5"
         >
           <div className="grid gap-3 sm:grid-cols-2">
             <label className="space-y-1.5 text-sm">
-              <span className="font-medium text-zinc-700">
+              <span className="font-medium text-ink">
                 {t("customAdd.quantity")}
               </span>
               <input
@@ -119,12 +119,12 @@ export function AddToCollectionForm({ card }: AddToCollectionFormProps) {
                 max={999}
                 value={quantity}
                 onChange={(event) => setQuantity(Number(event.target.value))}
-                className="w-full rounded-xl border border-zinc-300 bg-white px-3 py-2 text-zinc-900 outline-none focus:border-mana-blue focus:ring-4 focus:ring-mana-blue/15"
+                className="w-full rounded-xl border border-ink/20 bg-surface px-3 py-2 text-ink outline-none focus:border-accent focus:ring-4 focus:ring-accent/25"
               />
             </label>
 
             <label className="space-y-1.5 text-sm">
-              <span className="font-medium text-zinc-700">
+              <span className="font-medium text-ink">
                 {t("customAdd.condition")}
               </span>
               <select
@@ -132,7 +132,7 @@ export function AddToCollectionForm({ card }: AddToCollectionFormProps) {
                 onChange={(event) =>
                   setCondition(event.target.value as CardCondition)
                 }
-                className="w-full rounded-xl border border-zinc-300 bg-white px-3 py-2 text-zinc-900 outline-none focus:border-mana-blue focus:ring-4 focus:ring-mana-blue/15"
+                className="w-full rounded-xl border border-ink/20 bg-surface px-3 py-2 text-ink outline-none focus:border-accent focus:ring-4 focus:ring-accent/25"
               >
                 {CONDITIONS.map((item) => (
                   <option key={item.value} value={item.value}>
@@ -143,7 +143,7 @@ export function AddToCollectionForm({ card }: AddToCollectionFormProps) {
             </label>
 
             <label className="space-y-1.5 text-sm">
-              <span className="font-medium text-zinc-700">
+              <span className="font-medium text-ink">
                 {t("customAdd.finish")}
               </span>
               <select
@@ -151,7 +151,7 @@ export function AddToCollectionForm({ card }: AddToCollectionFormProps) {
                 onChange={(event) =>
                   setFinish(event.target.value as CardFinish)
                 }
-                className="w-full rounded-xl border border-zinc-300 bg-white px-3 py-2 text-zinc-900 outline-none focus:border-mana-blue focus:ring-4 focus:ring-mana-blue/15"
+                className="w-full rounded-xl border border-ink/20 bg-surface px-3 py-2 text-ink outline-none focus:border-accent focus:ring-4 focus:ring-accent/25"
               >
                 {finishes.map((item) => (
                   <option key={item} value={item}>
@@ -166,19 +166,19 @@ export function AddToCollectionForm({ card }: AddToCollectionFormProps) {
             </label>
 
             <label className="space-y-1.5 text-sm">
-              <span className="font-medium text-zinc-700">
+              <span className="font-medium text-ink">
                 {t("customAdd.language")}
               </span>
               <input
                 type="text"
                 value={language}
                 onChange={(event) => setLanguage(event.target.value)}
-                className="w-full rounded-xl border border-zinc-300 bg-white px-3 py-2 text-zinc-900 outline-none focus:border-mana-blue focus:ring-4 focus:ring-mana-blue/15"
+                className="w-full rounded-xl border border-ink/20 bg-surface px-3 py-2 text-ink outline-none focus:border-accent focus:ring-4 focus:ring-accent/25"
               />
             </label>
 
             <label className="space-y-1.5 text-sm">
-              <span className="font-medium text-zinc-700">
+              <span className="font-medium text-ink">
                 {t("customAdd.purchasePrice")}
               </span>
               <input
@@ -188,31 +188,31 @@ export function AddToCollectionForm({ card }: AddToCollectionFormProps) {
                 value={purchasePrice}
                 onChange={(event) => setPurchasePrice(event.target.value)}
                 placeholder={t("customAdd.optional")}
-                className="w-full rounded-xl border border-zinc-300 bg-white px-3 py-2 text-zinc-900 outline-none focus:border-mana-blue focus:ring-4 focus:ring-mana-blue/15"
+                className="w-full rounded-xl border border-ink/20 bg-surface px-3 py-2 text-ink outline-none placeholder:text-ink-soft focus:border-accent focus:ring-4 focus:ring-accent/25"
               />
             </label>
 
             <label className="space-y-1.5 text-sm">
-              <span className="font-medium text-zinc-700">
+              <span className="font-medium text-ink">
                 {t("customAdd.purchaseDate")}
               </span>
               <input
                 type="date"
                 value={purchaseDate}
                 onChange={(event) => setPurchaseDate(event.target.value)}
-                className="w-full rounded-xl border border-zinc-300 bg-white px-3 py-2 text-zinc-900 outline-none focus:border-mana-blue focus:ring-4 focus:ring-mana-blue/15"
+                className="w-full rounded-xl border border-ink/20 bg-surface px-3 py-2 text-ink outline-none focus:border-accent focus:ring-4 focus:ring-accent/25"
               />
             </label>
           </div>
 
           {message ? (
-            <p className="rounded-xl bg-mana-green/10 px-3 py-2 text-sm text-mana-green ring-1 ring-mana-green/30">
+            <p className="rounded-xl bg-mana-green/15 px-3 py-2 text-sm text-mana-green ring-1 ring-mana-green/30">
               {message}
             </p>
           ) : null}
 
           {error ? (
-            <p className="rounded-xl bg-rose-50 px-3 py-2 text-sm text-rose-800 ring-1 ring-rose-200">
+            <p className="rounded-xl bg-mana-red/15 px-3 py-2 text-sm text-mana-red ring-1 ring-mana-red/30">
               {error}
             </p>
           ) : null}
@@ -220,7 +220,7 @@ export function AddToCollectionForm({ card }: AddToCollectionFormProps) {
           <button
             type="submit"
             disabled={isPending}
-            className="inline-flex w-full items-center justify-center rounded-full bg-ink px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-ink/90 disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto"
+            className="inline-flex w-full items-center justify-center rounded-full bg-accent px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-accent/85 disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto"
           >
             {isPending ? t("customAdd.adding") : t("customAdd.submit")}
           </button>

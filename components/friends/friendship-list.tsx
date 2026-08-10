@@ -44,17 +44,17 @@ export function FriendshipList({ friendships }: FriendshipListProps) {
           {incoming.length > 0 ? ` (${incoming.length})` : ""}
         </h2>
         {incoming.length === 0 ? (
-          <p className="text-sm text-ink/55">{t("friends.emptyIncoming")}</p>
+          <p className="text-sm text-ink-soft">{t("friends.emptyIncoming")}</p>
         ) : (
           <ul className="space-y-2">
             {incoming.map((item) => (
               <li
                 key={item.id}
-                className="flex flex-col gap-3 rounded-2xl border border-mana-blue/20 bg-white p-4 ring-1 ring-mana-blue/10 sm:flex-row sm:items-center sm:justify-between"
+                className="flex flex-col gap-3 rounded-2xl border border-accent/25 bg-surface-elevated p-4 ring-1 ring-accent/15 sm:flex-row sm:items-center sm:justify-between"
               >
                 <div>
                   <p className="font-semibold text-ink">{item.friend.name}</p>
-                  <p className="text-sm text-ink/55">{item.friend.email}</p>
+                  <p className="text-sm text-ink-soft">{item.friend.email}</p>
                 </div>
                 <div className="flex flex-wrap gap-2">
                   <button
@@ -63,7 +63,7 @@ export function FriendshipList({ friendships }: FriendshipListProps) {
                     onClick={() =>
                       runAction(() => acceptFriendRequestAction(item.id))
                     }
-                    className="rounded-full bg-ink px-4 py-2 text-xs font-semibold text-white hover:bg-ink/90 disabled:opacity-60"
+                    className="rounded-full bg-accent px-4 py-2 text-xs font-semibold text-white hover:bg-accent/85 disabled:opacity-60"
                   >
                     {t("friends.accept")}
                   </button>
@@ -73,7 +73,7 @@ export function FriendshipList({ friendships }: FriendshipListProps) {
                     onClick={() =>
                       runAction(() => declineFriendRequestAction(item.id))
                     }
-                    className="rounded-full border border-ink/15 bg-white px-4 py-2 text-xs font-semibold text-ink hover:bg-zinc-50 disabled:opacity-60"
+                    className="rounded-full border border-ink/20 bg-surface px-4 py-2 text-xs font-semibold text-ink hover:bg-surface-elevated disabled:opacity-60"
                   >
                     {t("friends.decline")}
                   </button>
@@ -89,22 +89,22 @@ export function FriendshipList({ friendships }: FriendshipListProps) {
           {t("friends.accepted")}
         </h2>
         {accepted.length === 0 ? (
-          <p className="text-sm text-ink/55">{t("friends.emptyFriends")}</p>
+          <p className="text-sm text-ink-soft">{t("friends.emptyFriends")}</p>
         ) : (
           <ul className="space-y-2">
             {accepted.map((item) => (
               <li
                 key={item.id}
-                className="flex flex-col gap-3 rounded-2xl bg-white/90 p-4 ring-1 ring-ink/8 sm:flex-row sm:items-center sm:justify-between"
+                className="flex flex-col gap-3 rounded-2xl bg-surface-elevated p-4 ring-1 ring-ink/10 sm:flex-row sm:items-center sm:justify-between"
               >
                 <div>
                   <p className="font-semibold text-ink">{item.friend.name}</p>
-                  <p className="text-sm text-ink/55">{item.friend.email}</p>
+                  <p className="text-sm text-ink-soft">{item.friend.email}</p>
                 </div>
                 <div className="flex flex-wrap gap-2">
                   <Link
                     href={`/friends/${item.friend.id}/compare`}
-                    className="rounded-full bg-mana-blue px-4 py-2 text-xs font-semibold text-white hover:bg-mana-blue/90"
+                    className="rounded-full bg-accent px-4 py-2 text-xs font-semibold text-white hover:bg-accent/85"
                   >
                     {t("friends.compare")}
                   </Link>
@@ -112,7 +112,7 @@ export function FriendshipList({ friendships }: FriendshipListProps) {
                     type="button"
                     disabled={isPending}
                     onClick={() => runAction(() => removeFriendAction(item.id))}
-                    className="rounded-full border border-ink/15 bg-white px-4 py-2 text-xs font-semibold text-ink hover:bg-zinc-50 disabled:opacity-60"
+                    className="rounded-full border border-ink/20 bg-surface px-4 py-2 text-xs font-semibold text-ink hover:bg-surface-elevated disabled:opacity-60"
                   >
                     {t("friends.remove")}
                   </button>
@@ -128,18 +128,18 @@ export function FriendshipList({ friendships }: FriendshipListProps) {
           {t("friends.pendingOutgoing")}
         </h2>
         {outgoing.length === 0 ? (
-          <p className="text-sm text-ink/55">{t("friends.emptyOutgoing")}</p>
+          <p className="text-sm text-ink-soft">{t("friends.emptyOutgoing")}</p>
         ) : (
           <ul className="space-y-2">
             {outgoing.map((item) => (
               <li
                 key={item.id}
-                className="flex flex-col gap-3 rounded-2xl bg-white/90 p-4 ring-1 ring-ink/8 sm:flex-row sm:items-center sm:justify-between"
+                className="flex flex-col gap-3 rounded-2xl bg-surface-elevated p-4 ring-1 ring-ink/10 sm:flex-row sm:items-center sm:justify-between"
               >
                 <div>
                   <p className="font-semibold text-ink">{item.friend.name}</p>
-                  <p className="text-sm text-ink/55">{item.friend.email}</p>
-                  <p className="mt-1 text-xs font-medium uppercase tracking-[0.12em] text-gold-deep">
+                  <p className="text-sm text-ink-soft">{item.friend.email}</p>
+                  <p className="mt-1 text-xs font-medium uppercase tracking-[0.12em] text-gold">
                     {t("friends.pendingLabel")}
                   </p>
                 </div>
@@ -147,7 +147,7 @@ export function FriendshipList({ friendships }: FriendshipListProps) {
                   type="button"
                   disabled={isPending}
                   onClick={() => runAction(() => removeFriendAction(item.id))}
-                  className="rounded-full border border-ink/15 bg-white px-4 py-2 text-xs font-semibold text-ink hover:bg-zinc-50 disabled:opacity-60"
+                  className="rounded-full border border-ink/20 bg-surface px-4 py-2 text-xs font-semibold text-ink hover:bg-surface-elevated disabled:opacity-60"
                 >
                   {t("friends.remove")}
                 </button>

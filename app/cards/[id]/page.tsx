@@ -55,7 +55,7 @@ export default async function CardPage({ params }: CardPageProps) {
     <div className="space-y-6">
       <Link
         href="/search"
-        className="inline-flex text-sm font-medium text-mana-blue transition hover:text-mana-blue"
+        className="inline-flex text-sm font-medium text-accent transition hover:text-accent/80"
       >
         {t("card.backToSearch")}
       </Link>
@@ -66,18 +66,18 @@ export default async function CardPage({ params }: CardPageProps) {
           session?.user ? (
             <QuickAddToCollection card={card} />
           ) : (
-            <div className="rounded-2xl bg-white p-4 text-center ring-1 ring-ink/8 sm:text-left">
-              <p className="text-sm text-zinc-600">{t("card.loginPrompt")}</p>
+            <div className="rounded-2xl bg-surface-elevated p-4 text-center ring-1 ring-ink/15 sm:text-left">
+              <p className="text-sm text-ink-soft">{t("card.loginPrompt")}</p>
               <div className="mt-3 flex flex-wrap justify-center gap-3 sm:justify-start">
                 <Link
                   href="/auth/sign-in"
-                  className="inline-flex items-center justify-center rounded-full bg-ink px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-ink/90"
+                  className="inline-flex items-center justify-center rounded-full bg-accent px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-accent/85"
                 >
                   {t("card.signIn")}
                 </Link>
                 <Link
                   href="/auth/sign-up"
-                  className="inline-flex items-center justify-center rounded-full border border-zinc-400 bg-white px-5 py-2.5 text-sm font-semibold text-zinc-900 transition hover:bg-zinc-50"
+                  className="inline-flex items-center justify-center rounded-full border border-ink/25 bg-surface px-5 py-2.5 text-sm font-semibold text-ink transition hover:bg-surface-elevated"
                 >
                   {t("card.signUp")}
                 </Link>

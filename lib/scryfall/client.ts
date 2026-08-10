@@ -1,11 +1,15 @@
 import "server-only"
 
 import type { Card } from "@/types/card"
-import { mapScryfallCard } from "./mapper"
+import type { CardSet } from "@/types/set"
+import { mapScryfallCard, mapScryfallSet } from "./mapper"
 import type {
   ScryfallCard,
+  ScryfallCardListResponse,
   ScryfallErrorResponse,
   ScryfallListResponse,
+  ScryfallSet,
+  ScryfallSetListResponse,
 } from "./types"
 
 const SCRYFALL_API_BASE = "https://api.scryfall.com"
@@ -22,6 +26,8 @@ const CACHE_DURATIONS = {
   CARD_DETAILS: 86400, // 24 hours
   /** Search results - balance freshness with API efficiency */
   CARD_SEARCH: 3600, // 1 hour
+  /** Set metadata - changes rarely (only when new sets release) */
+  SET_DATA: 86400, // 24 hours
   /** Fallback for any uncategorized requests */
   DEFAULT: 3600, // 1 hour
 } as const
@@ -48,6 +54,41 @@ async function scryfallFetch<T>(
   const { revalidate = CACHE_DURATIONS.DEFAULT, tags } = options
 
   const response = await fetch(`${SCRYFALL_API_BASE}${path}`, {
+    headers: {
+      Accept: ACCEPT_HEADER,
+      "User-Agent": USER_AGENT,
+    },
+    next: {
+      revalidate,
+      tags,
+    },
+  })
+
+  if (!response.ok) {
+    let message = `Scryfall request failed (${response.status})`
+
+    try {
+      const errorBody = (await response.json()) as ScryfallErrorResponse
+      if (errorBody.details) {
+        message = errorBody.details
+      }
+    } catch {
+      // Keep the default message when the body is not JSON.
+    }
+
+    throw new ScryfallApiError(message, response.status)
+  }
+
+  return (await response.json()) as T
+}
+
+async function scryfallFetchUrl<T>(
+  url: string,
+  options: FetchOptions = {},
+): Promise<T> {
+  const { revalidate = CACHE_DURATIONS.DEFAULT, tags } = options
+
+  const response = await fetch(url, {
     headers: {
       Accept: ACCEPT_HEADER,
       "User-Agent": USER_AGENT,
@@ -159,4 +200,68 @@ export async function getCardBySetAndNumber(
   )
 
   return mapScryfallCard(card)
+}
+
+/**
+ * Get all Magic: The Gathering sets.
+ * Uses longer cache (24 hours) since sets rarely change.
+ */
+export async function getSets(): Promise<CardSet[]> {
+  const result = await scryfallFetch<ScryfallSetListResponse>("/sets", {
+    revalidate: CACHE_DURATIONS.SET_DATA,
+    tags: ["sets"],
+  })
+
+  return result.data.map(mapScryfallSet)
+}
+
+/**
+ * Get a single set by its code.
+ * Uses longer cache (24 hours) since set metadata rarely changes.
+ */
+export async function getSetByCode(code: string): Promise<CardSet> {
+  const normalizedCode = code.toLowerCase()
+
+  const set = await scryfallFetch<ScryfallSet>(`/sets/${normalizedCode}`, {
+    revalidate: CACHE_DURATIONS.SET_DATA,
+    tags: [`set-${normalizedCode}`],
+  })
+
+  return mapScryfallSet(set)
+}
+
+/**
+ * Get all cards from a set, handling pagination automatically.
+ * Uses the search endpoint with the set:code filter.
+ * Tagged by set for cache management.
+ */
+export async function getCardsBySet(setCode: string): Promise<Card[]> {
+  const normalizedCode = setCode.toLowerCase()
+  const allCards: Card[] = []
+
+  const params = new URLSearchParams({
+    q: `set:${normalizedCode}`,
+    unique: "prints",
+    order: "set",
+  })
+
+  let result = await scryfallFetch<ScryfallCardListResponse>(
+    `/cards/search?${params.toString()}`,
+    {
+      revalidate: CACHE_DURATIONS.SET_DATA,
+      tags: [`set-cards-${normalizedCode}`],
+    },
+  )
+
+  allCards.push(...result.data.map(mapScryfallCard))
+
+  while (result.has_more && result.next_page) {
+    result = await scryfallFetchUrl<ScryfallCardListResponse>(result.next_page, {
+      revalidate: CACHE_DURATIONS.SET_DATA,
+      tags: [`set-cards-${normalizedCode}`],
+    })
+    allCards.push(...result.data.map(mapScryfallCard))
+  }
+
+  return allCards
 }

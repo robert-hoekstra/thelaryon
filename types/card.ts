@@ -17,4 +17,12 @@ export type Card = {
     usdFoil: number | null
   }
   finishes: string[]
+  borderColor?: string
+  frameEffects?: string[]
+  fullArt?: boolean
+  promo?: boolean
+  promoTypes?: string[]
+  booster?: boolean
+  securityStamp?: string
+  lang?: string
 }

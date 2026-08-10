@@ -1,5 +1,6 @@
 import type { Card } from "@/types/card"
-import type { ScryfallCard, ScryfallImageUris } from "./types"
+import type { CardSet } from "@/types/set"
+import type { ScryfallCard, ScryfallImageUris, ScryfallSet } from "./types"
 
 function parsePrice(value: string | null | undefined): number | null {
   if (value == null || value === "") {
@@ -40,5 +41,27 @@ export function mapScryfallCard(card: ScryfallCard): Card {
       usdFoil: parsePrice(card.prices.usd_foil),
     },
     finishes: card.finishes ?? [],
+    borderColor: card.border_color,
+    frameEffects: card.frame_effects,
+    fullArt: card.full_art,
+    promo: card.promo,
+    promoTypes: card.promo_types,
+    booster: card.booster,
+    securityStamp: card.security_stamp,
+    lang: card.lang,
+  }
+}
+
+export function mapScryfallSet(set: ScryfallSet): CardSet {
+  return {
+    id: set.id,
+    code: set.code.toUpperCase(),
+    name: set.name,
+    setType: set.set_type,
+    releasedAt: set.released_at,
+    cardCount: set.card_count,
+    iconSvgUri: set.icon_svg_uri,
+    digital: set.digital ?? false,
+    parentSetCode: set.parent_set_code?.toUpperCase(),
   }
 }

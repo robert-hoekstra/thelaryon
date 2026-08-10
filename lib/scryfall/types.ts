@@ -28,6 +28,41 @@ export type ScryfallCard = {
     eur_foil: string | null
   }
   finishes: string[]
+  border_color?: string
+  frame_effects?: string[]
+  full_art?: boolean
+  promo?: boolean
+  promo_types?: string[]
+  booster?: boolean
+  security_stamp?: string
+  lang?: string
+}
+
+export type ScryfallSet = {
+  object: "set"
+  id: string
+  code: string
+  name: string
+  set_type: string
+  released_at: string | null
+  card_count: number
+  icon_svg_uri: string
+  digital?: boolean
+  parent_set_code?: string
+}
+
+export type ScryfallCardListResponse = {
+  object: "list"
+  total_cards?: number
+  has_more: boolean
+  next_page?: string
+  data: ScryfallCard[]
+}
+
+export type ScryfallSetListResponse = {
+  object: "list"
+  has_more: boolean
+  data: ScryfallSet[]
 }
 
 export type ScryfallListResponse = {

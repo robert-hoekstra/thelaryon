@@ -14,6 +14,7 @@ export function DesktopNavigation() {
     { href: "/", label: t("nav.home") },
     { href: "/search", label: t("nav.search") },
     { href: "/collection", label: t("nav.collection") },
+    { href: "/sets", label: t("nav.sets") },
     { href: "/friends", label: t("nav.friends") },
     { href: "/profile", label: t("nav.profile") },
   ] as const

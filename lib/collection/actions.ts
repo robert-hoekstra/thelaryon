@@ -73,6 +73,7 @@ export async function addToCollectionAction(
     const item = await addCollectionItem(data, user.userId)
     revalidatePath("/collection")
     revalidatePath("/")
+    revalidatePath("/binders", "layout")
     revalidatePath(`/cards/${item.scryfallId}`)
 
     return {
@@ -119,6 +120,7 @@ export async function updateCollectionItemAction(
 
     revalidatePath("/collection")
     revalidatePath("/")
+    revalidatePath("/binders", "layout")
 
     return {
       ok: true,
@@ -154,6 +156,7 @@ export async function deleteCollectionItemAction(
 
     revalidatePath("/collection")
     revalidatePath("/")
+    revalidatePath("/binders", "layout")
 
     return {
       ok: true,

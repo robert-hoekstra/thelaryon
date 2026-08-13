@@ -21,6 +21,8 @@ export const config = {
   matcher: [
     "/collection",
     "/collection/:path*",
+    "/binders",
+    "/binders/:path*",
     "/friends",
     "/friends/:path*",
     "/profile",

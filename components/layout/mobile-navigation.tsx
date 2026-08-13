@@ -13,9 +13,9 @@ export function MobileNavigation() {
   const navItems = [
     { href: "/", label: t("nav.home") },
     { href: "/collection", label: t("nav.collection") },
+    { href: "/binders", label: t("nav.binders") },
     { href: "/sets", label: t("nav.sets") },
     { href: "/search", label: t("nav.search") },
-    { href: "/friends", label: t("nav.friends") },
   ] as const
 
   return (

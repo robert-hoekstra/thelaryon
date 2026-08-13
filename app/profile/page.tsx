@@ -4,9 +4,11 @@ import { redirect } from "next/navigation"
 
 import { signOutAction } from "@/app/auth/sign-out/actions"
 import { LanguageSwitcher } from "@/components/i18n/language-switcher"
+import { BoosterPackPriceForm } from "@/components/profile/booster-pack-price-form"
 import { ensureAppUser } from "@/lib/auth/ensure-app-user"
 import { auth } from "@/lib/auth/server"
 import { getTranslator } from "@/lib/i18n/get-locale"
+import { getUserBoosterPackPrice } from "@/lib/user/service"
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslator()
@@ -22,13 +24,14 @@ export default async function ProfilePage() {
     redirect("/auth/sign-in")
   }
 
-  await ensureAppUser({
+  const userId = await ensureAppUser({
     id: session.user.id,
     email: session.user.email,
     name: session.user.name,
   })
 
   const t = await getTranslator()
+  const boosterPackPrice = await getUserBoosterPackPrice(userId)
 
   return (
     <div className="mx-auto max-w-lg space-y-6">
@@ -57,6 +60,8 @@ export default async function ProfilePage() {
           </p>
         </div>
       </div>
+
+      <BoosterPackPriceForm initialPrice={boosterPackPrice} />
 
       <LanguageSwitcher />
 

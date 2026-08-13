@@ -4,6 +4,7 @@ import Link from "next/link"
 import { useState } from "react"
 
 import { CardImage } from "@/components/cards/card-image"
+import { CardTilt } from "@/components/cards/card-tilt"
 import { useTranslations } from "@/components/i18n/locale-provider"
 import type { SetComparisonCard, SetComparisonResult } from "@/lib/sets/compare"
 import { cn } from "@/lib/utils"
@@ -291,38 +292,40 @@ function ComparisonCardItem({ card, friendName }: ComparisonCardItemProps) {
   return (
     <article
       className={cn(
-        "group flex flex-col overflow-hidden rounded-2xl bg-surface-elevated shadow-[0_1px_0_rgba(0,0,0,0.15),0_12px_30px_-18px_rgba(0,0,0,0.6)] ring-1 ring-ink/10 transition duration-200",
+        "card-grid-item group flex flex-col rounded-2xl bg-surface-elevated shadow-[0_1px_0_rgba(0,0,0,0.15),0_12px_30px_-18px_rgba(0,0,0,0.55)] ring-1 ring-ink/15 transition duration-200",
         card.status === "neither" && "opacity-60",
-        "hover:-translate-y-0.5 hover:shadow-[0_1px_0_rgba(0,0,0,0.15),0_18px_36px_-16px_rgba(0,0,0,0.75)] hover:ring-accent/30",
+        "hover:shadow-[0_1px_0_rgba(0,0,0,0.15),0_20px_40px_-16px_rgba(0,0,0,0.7)] hover:ring-accent/40",
       )}
     >
-      <Link
-        href={`/cards/${card.scryfallId}`}
-        className="relative aspect-[5/7] overflow-hidden bg-surface"
-      >
-        {card.image ? (
-          <CardImage
-            src={card.image}
-            alt={card.name}
-            fill
-            sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 240px"
-            className="object-cover transition duration-300 group-hover:scale-[1.02]"
-          />
-        ) : (
-          <div className="flex h-full items-center justify-center px-4 text-center text-sm text-ink-soft">
-            {t("card.noImage")}
-          </div>
-        )}
-
-        <div
-          className={cn(
-            "absolute left-2 top-2 rounded-full px-2 py-0.5 text-[10px] font-bold text-white",
-            statusColors[card.status],
-          )}
+      <CardTilt className="z-10 rounded-2xl">
+        <Link
+          href={`/cards/${card.scryfallId}`}
+          className="relative aspect-[5/7] block overflow-hidden rounded-2xl bg-surface"
         >
-          {statusLabels[card.status]}
-        </div>
-      </Link>
+          {card.image ? (
+            <CardImage
+              src={card.image}
+              alt={card.name}
+              fill
+              sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 240px"
+              className="object-cover"
+            />
+          ) : (
+            <div className="flex h-full items-center justify-center px-4 text-center text-sm text-ink-soft">
+              {t("card.noImage")}
+            </div>
+          )}
+
+          <div
+            className={cn(
+              "absolute left-2 top-2 rounded-full px-2 py-0.5 text-[10px] font-bold text-white",
+              statusColors[card.status],
+            )}
+          >
+            {statusLabels[card.status]}
+          </div>
+        </Link>
+      </CardTilt>
 
       <div className="flex flex-1 flex-col gap-1 p-3">
         <Link href={`/cards/${card.scryfallId}`} className="block">

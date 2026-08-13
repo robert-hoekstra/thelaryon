@@ -10,6 +10,7 @@ import {
   updateCollectionItem,
 } from "@/lib/collection/service"
 import { getTranslator } from "@/lib/i18n/get-locale"
+import { getDefaultCardPurchasePrice } from "@/lib/user/service"
 import {
   addCollectionItemSchema,
   updateCollectionItemSchema,
@@ -60,7 +61,16 @@ export async function addToCollectionAction(
   }
 
   try {
-    const item = await addCollectionItem(parsed.data, user.userId)
+    const data = { ...parsed.data }
+
+    if (data.purchasePrice === undefined) {
+      const defaultPrice = await getDefaultCardPurchasePrice(user.userId)
+      if (defaultPrice != null) {
+        data.purchasePrice = defaultPrice
+      }
+    }
+
+    const item = await addCollectionItem(data, user.userId)
     revalidatePath("/collection")
     revalidatePath("/")
     revalidatePath(`/cards/${item.scryfallId}`)

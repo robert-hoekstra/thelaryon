@@ -1,13 +1,22 @@
 import Link from "next/link"
 
-import { auth } from "@/lib/auth/server"
+import { HomeCollectionWidgets } from "@/components/home/collection-widgets"
 import { ensureAppUser } from "@/lib/auth/ensure-app-user"
+import { auth } from "@/lib/auth/server"
+import {
+  getBiggestGains,
+  getFinishBreakdown,
+  getMostValuable,
+  getRecentlyAdded,
+  getTopSets,
+} from "@/lib/collection/insights"
 import {
   listCollectionItems,
   summarizeCollection,
 } from "@/lib/collection/service"
 import { getLocale, getTranslator } from "@/lib/i18n/get-locale"
 import { formatEuroPrice } from "@/lib/pricing/price"
+import type { CollectionItem } from "@/types/collection"
 
 export const dynamic = "force-dynamic"
 
@@ -24,6 +33,7 @@ export default async function HomePage() {
     profitLoss: 0,
   }
   let hasPurchasePrices = false
+  let items: CollectionItem[] = []
 
   if (session?.user) {
     const userId = await ensureAppUser({
@@ -31,10 +41,16 @@ export default async function HomePage() {
       email: session.user.email,
       name: session.user.name,
     })
-    const items = await listCollectionItems(userId)
+    items = await listCollectionItems(userId)
     summary = summarizeCollection(items)
     hasPurchasePrices = items.some((item) => item.purchasePrice != null)
   }
+
+  const recentlyAdded = getRecentlyAdded(items, 8)
+  const mostValuable = getMostValuable(items, 8)
+  const biggestGains = getBiggestGains(items, 6)
+  const topSets = getTopSets(items, 5)
+  const finishes = getFinishBreakdown(items)
 
   return (
     <div className="space-y-8">
@@ -131,7 +147,19 @@ export default async function HomePage() {
         </section>
       ) : null}
 
-      <section className="grid gap-3 sm:grid-cols-2">
+      {session?.user && items.length > 0 ? (
+        <HomeCollectionWidgets
+          recentlyAdded={recentlyAdded}
+          mostValuable={mostValuable}
+          biggestGains={biggestGains}
+          topSets={topSets}
+          finishes={finishes}
+          locale={locale}
+          t={t}
+        />
+      ) : null}
+
+      <section className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
         {[
           {
             title: t("home.searchTitle"),
@@ -147,6 +175,12 @@ export default async function HomePage() {
             href: session?.user ? "/collection" : "/auth/sign-in",
             tint: "hover:ring-mana-green/25",
           },
+          {
+            title: t("home.setsTitle"),
+            body: t("home.setsBody"),
+            href: "/sets",
+            tint: "hover:ring-gold/25",
+          },
         ].map((item) => (
           <Link
             key={item.title}
@@ -154,7 +188,9 @@ export default async function HomePage() {
             className={`rounded-2xl bg-surface/80 p-5 ring-1 ring-ink/10 transition hover:bg-surface-elevated ${item.tint}`}
           >
             <h2 className="text-sm font-semibold text-ink">{item.title}</h2>
-            <p className="mt-2 text-sm leading-relaxed text-ink-soft">{item.body}</p>
+            <p className="mt-2 text-sm leading-relaxed text-ink-soft">
+              {item.body}
+            </p>
           </Link>
         ))}
       </section>

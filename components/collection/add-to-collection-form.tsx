@@ -32,9 +32,13 @@ function mapFinish(value: string): CardFinish | null {
 
 type AddToCollectionFormProps = {
   card: Card
+  defaultPurchasePrice?: number
 }
 
-export function AddToCollectionForm({ card }: AddToCollectionFormProps) {
+export function AddToCollectionForm({
+  card,
+  defaultPurchasePrice,
+}: AddToCollectionFormProps) {
   const t = useTranslations()
   const availableFinishes = card.finishes
     .map(mapFinish)
@@ -50,7 +54,9 @@ export function AddToCollectionForm({ card }: AddToCollectionFormProps) {
   const [condition, setCondition] = useState<CardCondition>("NEAR_MINT")
   const [finish, setFinish] = useState<CardFinish>(finishes[0])
   const [language, setLanguage] = useState("en")
-  const [purchasePrice, setPurchasePrice] = useState("")
+  const [purchasePrice, setPurchasePrice] = useState(
+    defaultPurchasePrice != null ? defaultPurchasePrice.toFixed(2) : "",
+  )
   const [purchaseDate, setPurchaseDate] = useState("")
   const [message, setMessage] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)

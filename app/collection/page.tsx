@@ -1,7 +1,7 @@
 import type { Metadata } from "next"
 import Link from "next/link"
 
-import { CollectionGrid } from "@/components/collection/collection-grid"
+import { CollectionBrowser } from "@/components/collection/collection-browser"
 import { ensureAppUser } from "@/lib/auth/ensure-app-user"
 import { auth } from "@/lib/auth/server"
 import {
@@ -116,7 +116,7 @@ export default async function CollectionPage() {
           </div>
         </div>
       ) : (
-        <CollectionGrid items={items} />
+        <CollectionBrowser items={items} />
       )}
     </div>
   )

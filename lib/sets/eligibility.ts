@@ -40,24 +40,34 @@ export function filterRelevantSets(sets: CardSet[]): CardSet[] {
   )
 }
 
+type EligibilityOptions = {
+  /**
+   * When true, exclude cards with booster === false.
+   * Only apply this when the set actually has booster printings;
+   * some Universes Beyond / special sets mark every card as booster:false.
+   */
+  requireBooster?: boolean
+}
+
 /**
  * Determines if a card is eligible for "Main Set Completion".
- * 
+ *
  * Main set completion includes:
- * - Regular numbered cards that appear in boosters
+ * - Regular numbered cards that appear in boosters (when the set has them)
  * - Cards with standard borders
- * 
+ *
  * Excludes:
  * - Promo cards (buy-a-box, prerelease, etc.)
  * - Special guest cards
- * - Bonus sheet cards (typically high collector numbers)
  * - Art cards
- * - Extended art / borderless variants (often in collector boosters only)
- * 
- * This function can be extended later to support different completion modes
- * (e.g., "All printings", "Master set", "Non-foil complete").
+ * - Gold-bordered World Championship printings
  */
-export function isCardEligibleForMainSetCompletion(card: Card): boolean {
+export function isCardEligibleForMainSetCompletion(
+  card: Card,
+  options: EligibilityOptions = {},
+): boolean {
+  const { requireBooster = false } = options
+
   // Exclude promo cards
   if (card.promo) {
     return false
@@ -76,7 +86,7 @@ export function isCardEligibleForMainSetCompletion(card: Card): boolean {
     "surgefoil",
     "galaxyfoil",
   ]
-  
+
   if (card.promoTypes?.some((type) => excludedPromoTypes.includes(type))) {
     return false
   }
@@ -86,9 +96,8 @@ export function isCardEligibleForMainSetCompletion(card: Card): boolean {
     return false
   }
 
-  // Include cards that appear in boosters (best indicator for main set)
-  // If booster field is undefined, we include the card (older sets may not have this field)
-  if (card.booster === false) {
+  // Only enforce booster membership when the set has known booster cards
+  if (requireBooster && card.booster === false) {
     return false
   }
 
@@ -97,18 +106,29 @@ export function isCardEligibleForMainSetCompletion(card: Card): boolean {
     return false
   }
 
-  // Exclude silver-bordered cards (un-sets joke cards when not tracking the un-set itself)
-  // Note: We allow silver borders for sets that are specifically silver-bordered (funny sets)
-  // This is handled at the set level, not card level
-
   return true
 }
 
 /**
  * Filters cards to only include those eligible for main set completion.
+ * If any card is marked booster:true, prefer booster printings.
+ * Otherwise include all non-promo cards (handles sets where Scryfall
+ * marks everything as booster:false, e.g. some Universes Beyond sets).
  */
 export function filterEligibleCards(cards: Card[]): Card[] {
-  return cards.filter(isCardEligibleForMainSetCompletion)
+  const baseEligible = cards.filter((card) =>
+    isCardEligibleForMainSetCompletion(card, { requireBooster: false }),
+  )
+
+  const hasBoosterPrintings = baseEligible.some((card) => card.booster === true)
+
+  if (!hasBoosterPrintings) {
+    return baseEligible
+  }
+
+  return baseEligible.filter((card) =>
+    isCardEligibleForMainSetCompletion(card, { requireBooster: true }),
+  )
 }
 
 /**

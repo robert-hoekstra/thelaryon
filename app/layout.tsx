@@ -2,6 +2,7 @@ import type { Metadata } from "next"
 import { Analytics } from "@vercel/analytics/next"
 import { Geist_Mono, Source_Sans_3, Source_Serif_4 } from "next/font/google"
 
+import { CursorSearchlight } from "@/components/effects/cursor-searchlight"
 import { LocaleProvider } from "@/components/i18n/locale-provider"
 import { AppHeader } from "@/components/layout/app-header"
 import { MobileNavigation } from "@/components/layout/mobile-navigation"
@@ -48,13 +49,16 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
       lang={locale}
       className={`${display.variable} ${body.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col">
+      <body className="relative min-h-full flex flex-col">
+        <CursorSearchlight />
         <LocaleProvider locale={locale}>
-          <AppHeader />
-          <main className="mx-auto w-full max-w-6xl flex-1 px-4 pb-24 pt-6 md:pb-10 md:pt-8">
-            {children}
-          </main>
-          <MobileNavigation />
+          <div className="relative z-10 flex min-h-full flex-1 flex-col">
+            <AppHeader />
+            <main className="mx-auto w-full max-w-6xl flex-1 px-4 pb-24 pt-6 md:pb-10 md:pt-8">
+              {children}
+            </main>
+            <MobileNavigation />
+          </div>
         </LocaleProvider>
         <Analytics />
       </body>

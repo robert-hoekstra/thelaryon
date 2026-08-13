@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation"
 import { useState, useTransition } from "react"
 
 import { CardImage } from "@/components/cards/card-image"
+import { CardTilt } from "@/components/cards/card-tilt"
 import { useLocale, useTranslations } from "@/components/i18n/locale-provider"
 import {
   deleteCollectionItemAction,
@@ -111,25 +112,27 @@ export function CollectionItemCard({ item }: CollectionItemCardProps) {
   }
 
   return (
-    <article className="flex flex-col overflow-hidden rounded-2xl bg-surface-elevated shadow-[0_1px_0_rgba(0,0,0,0.15),0_12px_30px_-18px_rgba(0,0,0,0.6)] ring-1 ring-ink/10">
-      <Link
-        href={`/cards/${item.scryfallId}`}
-        className="relative aspect-[5/7] bg-surface"
-      >
-        {imageSrc ? (
-          <CardImage
-            src={imageSrc}
-            alt={item.name}
-            fill
-            sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 240px"
-            className="object-cover"
-          />
-        ) : (
-          <div className="flex h-full items-center justify-center px-4 text-center text-sm text-ink-soft">
-            {t("collectionItem.noImage")}
-          </div>
-        )}
-      </Link>
+    <article className="card-grid-item flex flex-col rounded-2xl bg-surface-elevated shadow-[0_1px_0_rgba(0,0,0,0.15),0_12px_30px_-18px_rgba(0,0,0,0.55)] ring-1 ring-ink/15">
+      <CardTilt className="z-10 rounded-2xl">
+        <Link
+          href={`/cards/${item.scryfallId}`}
+          className="relative aspect-[5/7] block overflow-hidden rounded-2xl bg-surface"
+        >
+          {imageSrc ? (
+            <CardImage
+              src={imageSrc}
+              alt={item.name}
+              fill
+              sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 240px"
+              className="object-cover"
+            />
+          ) : (
+            <div className="flex h-full items-center justify-center px-4 text-center text-sm text-ink-soft">
+              {t("collectionItem.noImage")}
+            </div>
+          )}
+        </Link>
+      </CardTilt>
 
       <div className="flex flex-1 flex-col gap-3 p-3">
         <div>

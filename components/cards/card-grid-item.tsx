@@ -1,9 +1,11 @@
 "use client"
 
 import Link from "next/link"
+import { useState } from "react"
 
 import { CardImage } from "@/components/cards/card-image"
 import { CardQuickActions } from "@/components/cards/card-quick-actions"
+import { CardTilt } from "@/components/cards/card-tilt"
 import { useLocale, useTranslations } from "@/components/i18n/locale-provider"
 import { formatEuroPrice } from "@/lib/pricing/price"
 import type { Card } from "@/types/card"
@@ -25,7 +27,21 @@ export function CardGridItem({
 }: CardGridItemProps) {
   const t = useTranslations()
   const { locale } = useLocale()
-  const imageSrc = card.image.normal ?? card.image.small
+  const artFaces =
+    card.faces?.filter(
+      (face) => face.image.normal ?? face.image.small ?? face.image.large,
+    ) ?? []
+  const isDoubleFaced = artFaces.length >= 2
+  const [faceIndex, setFaceIndex] = useState(0)
+
+  const activeFace = isDoubleFaced ? artFaces[faceIndex] : null
+  const imageSrc =
+    activeFace?.image.normal ??
+    activeFace?.image.small ??
+    card.image.normal ??
+    card.image.small
+  const imageAlt = activeFace?.name ?? card.name
+
   const euroPrice = formatEuroPrice(card.prices.eur, locale)
   const foilPrice =
     card.prices.eurFoil != null
@@ -33,25 +49,53 @@ export function CardGridItem({
       : null
 
   return (
-    <article className="group flex flex-col overflow-hidden rounded-2xl bg-surface-elevated shadow-[0_1px_0_rgba(0,0,0,0.15),0_12px_30px_-18px_rgba(0,0,0,0.6)] ring-1 ring-ink/10 transition duration-200 hover:-translate-y-0.5 hover:shadow-[0_1px_0_rgba(0,0,0,0.15),0_18px_36px_-16px_rgba(0,0,0,0.75)] hover:ring-accent/30">
-      <Link
-        href={`/cards/${card.id}`}
-        className="relative aspect-[5/7] overflow-hidden bg-surface"
-      >
-        {imageSrc ? (
-          <CardImage
-            src={imageSrc}
-            alt={card.name}
-            fill
-            sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 240px"
-            className="object-cover transition duration-300 group-hover:scale-[1.02]"
-          />
-        ) : (
-          <div className="flex h-full items-center justify-center px-4 text-center text-sm text-ink-soft">
-            {t("card.noImage")}
-          </div>
-        )}
-      </Link>
+    <article className="card-grid-item group flex flex-col rounded-2xl bg-surface-elevated shadow-[0_1px_0_rgba(0,0,0,0.15),0_12px_30px_-18px_rgba(0,0,0,0.55)] ring-1 ring-ink/15 transition duration-200 hover:shadow-[0_1px_0_rgba(0,0,0,0.15),0_20px_40px_-16px_rgba(0,0,0,0.7)] hover:ring-accent/40">
+      <CardTilt className="z-10 rounded-2xl">
+        <Link
+          href={`/cards/${card.id}`}
+          className="relative aspect-[5/7] block overflow-hidden rounded-2xl bg-surface"
+        >
+          {imageSrc ? (
+            <CardImage
+              src={imageSrc}
+              alt={imageAlt}
+              fill
+              sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 240px"
+              className="object-cover"
+            />
+          ) : (
+            <div className="flex h-full items-center justify-center px-4 text-center text-sm text-ink-soft">
+              {t("card.noImage")}
+            </div>
+          )}
+
+          {isDoubleFaced ? (
+            <span className="absolute left-2 top-2 rounded-full bg-surface/90 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.12em] text-ink ring-1 ring-ink/20">
+              {t("card.doubleFaced")}
+            </span>
+          ) : null}
+        </Link>
+      </CardTilt>
+
+      {isDoubleFaced ? (
+        <div className="flex gap-1 border-b border-ink/10 bg-surface/60 px-2 py-1.5">
+          {artFaces.map((face, index) => (
+            <button
+              key={`${face.name}-${index}`}
+              type="button"
+              onClick={() => setFaceIndex(index)}
+              className={
+                index === faceIndex
+                  ? "flex-1 rounded-lg bg-accent px-2 py-1 text-[11px] font-semibold text-white"
+                  : "flex-1 rounded-lg px-2 py-1 text-[11px] font-medium text-ink-soft transition hover:bg-surface-elevated hover:text-ink"
+              }
+              aria-pressed={index === faceIndex}
+            >
+              {index === 0 ? t("card.frontFace") : t("card.backFace")}
+            </button>
+          ))}
+        </div>
+      ) : null}
 
       <div className="flex flex-1 flex-col gap-2 p-3">
         <Link href={`/cards/${card.id}`} className="block">

@@ -1,30 +1,30 @@
 @import "tailwindcss";
 
 :root {
-  /* Surfaces — deep, immersive dark playmat */
-  --background: #0f1218;
-  --foreground: #e8ecf2;
-  --surface: #1a1f2a;
-  --surface-elevated: #242b38;
+  /* Surfaces — lighter playmat with clearer contrast */
+  --background: #171c26;
+  --foreground: #f2f5fa;
+  --surface: #232a38;
+  --surface-elevated: #303849;
 
   /* Brand / chrome */
-  --ink: #e8ecf2;
-  --ink-soft: #b8c0d0;
-  --gold: #e4b940;
-  --gold-deep: #d4a830;
+  --ink: #f2f5fa;
+  --ink-soft: #c8d0de;
+  --gold: #ecc44a;
+  --gold-deep: #d9b033;
 
   /* Mana — vivid, saturated MTG colors */
-  --mana-white: #f5ecc0;
-  --mana-blue: #1a8cdb;
-  --mana-black: #4a4255;
-  --mana-red: #e04535;
-  --mana-green: #1a9955;
+  --mana-white: #f7efc8;
+  --mana-blue: #2a96e0;
+  --mana-black: #5a5268;
+  --mana-red: #e85342;
+  --mana-green: #22a55f;
 
   --accent: var(--mana-blue);
-  --accent-soft: color-mix(in srgb, var(--mana-blue) 20%, transparent);
+  --accent-soft: color-mix(in srgb, var(--mana-blue) 22%, transparent);
   --success: var(--mana-green);
   --danger: var(--mana-red);
-  --ring: color-mix(in srgb, var(--mana-blue) 35%, transparent);
+  --ring: color-mix(in srgb, var(--mana-blue) 40%, transparent);
 }
 
 @theme inline {
@@ -48,19 +48,98 @@
 
 body {
   background-color: var(--background);
-  background-image:
-    /* Mana-colored corner glows */
-    radial-gradient(ellipse 80% 50% at 0% -10%, rgba(245, 236, 192, 0.12), transparent 55%),
-    radial-gradient(ellipse 70% 45% at 100% 0%, rgba(26, 140, 219, 0.15), transparent 50%),
-    radial-gradient(ellipse 55% 40% at 85% 100%, rgba(224, 69, 53, 0.1), transparent 45%),
-    radial-gradient(ellipse 50% 35% at 10% 90%, rgba(26, 153, 85, 0.12), transparent 45%),
-    /* MTG-inspired geometric pattern */
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 80 80'%3E%3Cg fill='none' stroke='%23ffffff' stroke-width='0.5' opacity='0.03'%3E%3C!-- Center diamond --%3E%3Cpath d='M40 10 L70 40 L40 70 L10 40 Z'/%3E%3C!-- Inner diamond --%3E%3Cpath d='M40 20 L60 40 L40 60 L20 40 Z'/%3E%3C!-- Corner accents --%3E%3Ccircle cx='40' cy='10' r='2'/%3E%3Ccircle cx='70' cy='40' r='2'/%3E%3Ccircle cx='40' cy='70' r='2'/%3E%3Ccircle cx='10' cy='40' r='2'/%3E%3C!-- Center ornament --%3E%3Ccircle cx='40' cy='40' r='4'/%3E%3Ccircle cx='40' cy='40' r='8'/%3E%3C!-- Diagonal lines --%3E%3Cpath d='M0 0 L20 20 M60 60 L80 80 M80 0 L60 20 M20 60 L0 80'/%3E%3C/g%3E%3C/svg%3E"),
-    linear-gradient(180deg, #12171f 0%, #0f1218 48%, #0d1015 100%);
-  background-attachment: fixed;
   color: var(--foreground);
   font-family: var(--font-body), ui-sans-serif, system-ui, sans-serif;
   min-height: 100%;
+}
+
+/*
+ * Fixed viewport playmat — glows + pattern stay locked to the screen,
+ * so long pages don't stretch/seam the atmosphere while scrolling.
+ */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-color: var(--background);
+  background-image:
+    radial-gradient(ellipse 80% 50% at 0% -10%, rgba(245, 236, 192, 0.18), transparent 55%),
+    radial-gradient(ellipse 70% 45% at 100% 0%, rgba(42, 150, 224, 0.2), transparent 50%),
+    radial-gradient(ellipse 55% 40% at 85% 100%, rgba(232, 83, 66, 0.14), transparent 45%),
+    radial-gradient(ellipse 50% 35% at 10% 90%, rgba(34, 165, 95, 0.16), transparent 45%),
+    /* Original diamond motif — larger tile so it stays open, not crowded */
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 80 80'%3E%3Cg fill='none' stroke='%23ffffff' stroke-width='0.55' opacity='0.11'%3E%3Cpath d='M40 10 L70 40 L40 70 L10 40 Z'/%3E%3Cpath d='M40 20 L60 40 L40 60 L20 40 Z'/%3E%3Ccircle cx='40' cy='10' r='2'/%3E%3Ccircle cx='70' cy='40' r='2'/%3E%3Ccircle cx='40' cy='70' r='2'/%3E%3Ccircle cx='10' cy='40' r='2'/%3E%3Ccircle cx='40' cy='40' r='4'/%3E%3Ccircle cx='40' cy='40' r='8'/%3E%3Cpath d='M0 0 L20 20 M60 60 L80 80 M80 0 L60 20 M20 60 L0 80'/%3E%3C/g%3E%3C/svg%3E"),
+    linear-gradient(180deg, #1c2230 0%, #171c26 48%, #141820 100%);
+  background-repeat: no-repeat, no-repeat, no-repeat, no-repeat, repeat, no-repeat;
+  background-position: center, center, center, center, center, center;
+  background-size: auto, auto, auto, auto, 148px 148px, 100% 100%;
+}
+
+/* Thelaryon spark cursors — gold + mana blue, playmat diamond motif */
+@media (pointer: fine) {
+  body,
+  .cursor-searchlight {
+    cursor: url("/cursors/spark.svg") 4 3, auto;
+  }
+
+  a,
+  button,
+  summary,
+  label[for],
+  select,
+  [role="button"],
+  .card-tilt-root,
+  .card-grid-item {
+    cursor: url("/cursors/spark-pointer.svg") 4 3, pointer;
+  }
+
+  input:not([type="checkbox"]):not([type="radio"]):not([type="range"]),
+  textarea,
+  [contenteditable="true"] {
+    cursor: text;
+  }
+
+  input[type="checkbox"],
+  input[type="radio"],
+  input[type="range"] {
+    cursor: url("/cursors/spark-pointer.svg") 4 3, pointer;
+  }
+}
+
+/* Cursor searchlight — soft light only, no duplicated pattern */
+.cursor-searchlight {
+  pointer-events: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1;
+  width: 560px;
+  height: 560px;
+  border-radius: 9999px;
+  opacity: 0;
+  transform: translate3d(-9999px, -9999px, 0);
+  background: radial-gradient(
+    circle closest-side,
+    rgba(255, 250, 235, 0.11) 0%,
+    rgba(42, 150, 224, 0.05) 45%,
+    transparent 72%
+  );
+  mix-blend-mode: soft-light;
+  will-change: transform, opacity;
+  transition: opacity 0.3s ease;
+  contain: strict;
+}
+
+.cursor-searchlight.is-active {
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cursor-searchlight {
+    display: none;
+  }
 }
 
 @layer base {
@@ -114,3 +193,52 @@ body {
 .mana-dots .g {
   background: var(--mana-green);
 }
+
+/* 3D card tilt glare */
+.card-tilt-glare {
+  background: radial-gradient(
+    circle at var(--shine-x, 50%) var(--shine-y, 50%),
+    rgba(255, 255, 255, 0.4) 0%,
+    rgba(255, 255, 255, 0.1) 28%,
+    transparent 55%
+  );
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  contain: strict;
+}
+
+.card-tilt-root[data-tilting="true"] {
+  z-index: 50;
+  filter: drop-shadow(0 22px 28px rgba(0, 0, 0, 0.55));
+}
+
+.card-tilt-root[data-tilting="true"] .card-tilt-glare {
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card-tilt-root {
+    transform: none !important;
+    transition: none !important;
+    filter: none !important;
+  }
+
+  .card-tilt-glare {
+    display: none;
+  }
+}
+
+/* Skip rendering work for off-screen collection / grid cards */
+.card-grid-item {
+  position: relative;
+  z-index: 0;
+  content-visibility: auto;
+  contain-intrinsic-size: auto 420px;
+}
+
+.card-grid-item:hover,
+.card-grid-item:has([data-tilting="true"]) {
+  z-index: 40;
+  content-visibility: visible;
+}
+

@@ -5,9 +5,11 @@ import { notFound } from "next/navigation"
 import { CardDetails } from "@/components/cards/card-details"
 import { AddToCollectionForm } from "@/components/collection/add-to-collection-form"
 import { QuickAddToCollection } from "@/components/collection/quick-add-to-collection"
+import { ensureAppUser } from "@/lib/auth/ensure-app-user"
 import { auth } from "@/lib/auth/server"
 import { getTranslator } from "@/lib/i18n/get-locale"
 import { getCardById, ScryfallApiError } from "@/lib/scryfall/client"
+import { getDefaultCardPurchasePrice } from "@/lib/user/service"
 
 type CardPageProps = {
   params: Promise<{
@@ -51,6 +53,17 @@ export default async function CardPage({ params }: CardPageProps) {
     throw error
   }
 
+  let defaultPurchasePrice: number | undefined
+
+  if (session?.user) {
+    const userId = await ensureAppUser({
+      id: session.user.id,
+      email: session.user.email,
+      name: session.user.name,
+    })
+    defaultPurchasePrice = await getDefaultCardPurchasePrice(userId)
+  }
+
   return (
     <div className="space-y-6">
       <Link
@@ -89,7 +102,10 @@ export default async function CardPage({ params }: CardPageProps) {
 
       {session?.user ? (
         <div className="mx-auto max-w-5xl">
-          <AddToCollectionForm card={card} />
+          <AddToCollectionForm
+            card={card}
+            defaultPurchasePrice={defaultPurchasePrice}
+          />
         </div>
       ) : null}
     </div>

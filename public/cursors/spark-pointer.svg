@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none">
+  <!-- Active / clickable spark  brighter gold diamond tip -->
+  <path
+    d="M4 2.5 L4 22.5 L9.2 17.5 L13.8 27.2 L17.6 25.4 L12.8 15.4 L21.5 15.4 Z"
+    fill="#1c2230"
+    stroke="#f0d060"
+    stroke-width="1.6"
+    stroke-linejoin="round"
+  />
+  <path
+    d="M5.2 5.2 L5.2 19.2 L9.2 15.6 L18.8 15.6 Z"
+    fill="#3aa3eb"
+  />
+  <path
+    d="M14 11.5 L19.5 6 L25 11.5 L19.5 17 Z"
+    fill="#fff4c8"
+    stroke="#f0d060"
+    stroke-width="1.15"
+    stroke-linejoin="round"
+  />
+  <circle cx="19.5" cy="11.5" r="1.6" fill="#f0d060" />
+  <circle cx="19.5" cy="11.5" r="3.4" stroke="#f0d060" stroke-width="1" opacity="0.45" />
+</svg>

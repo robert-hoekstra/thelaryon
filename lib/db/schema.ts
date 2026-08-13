@@ -36,6 +36,8 @@ export const users = pgTable("users", {
   id: uuid("id").defaultRandom().primaryKey(),
   email: text("email").notNull().unique(),
   name: text("name").notNull(),
+  /** EUR price paid for a booster pack; used as purchase-price default ÷ 14. */
+  boosterPackPrice: numeric("booster_pack_price", { precision: 10, scale: 2 }),
   createdAt: timestamp("created_at", { withTimezone: true })
     .defaultNow()
     .notNull(),

@@ -132,9 +132,16 @@ describe("isCardEligibleForMainSetCompletion", () => {
     expect(isCardEligibleForMainSetCompletion(card)).toBe(true)
   })
 
-  it("excludes cards not in boosters", () => {
+  it("includes cards not in boosters when checked alone", () => {
     const card = createCard({ booster: false })
-    expect(isCardEligibleForMainSetCompletion(card)).toBe(false)
+    expect(isCardEligibleForMainSetCompletion(card)).toBe(true)
+  })
+
+  it("excludes non-booster cards when requireBooster is set", () => {
+    const card = createCard({ booster: false })
+    expect(
+      isCardEligibleForMainSetCompletion(card, { requireBooster: true }),
+    ).toBe(false)
   })
 
   it("includes cards in boosters", () => {
@@ -172,6 +179,32 @@ describe("filterEligibleCards", () => {
     expect(filtered.map((c) => c.name)).toEqual([
       "Regular Card",
       "Another Regular",
+    ])
+  })
+
+  it("keeps booster:false cards when the set has no booster printings", () => {
+    const cards = [
+      createCard({ id: "1", name: "UB Card A", booster: false }),
+      createCard({ id: "2", name: "UB Card B", booster: false }),
+    ]
+
+    const filtered = filterEligibleCards(cards)
+
+    expect(filtered).toHaveLength(2)
+  })
+
+  it("prefers booster printings when the set has them", () => {
+    const cards = [
+      createCard({ id: "1", name: "Draft Card", booster: true }),
+      createCard({ id: "2", name: "Collector Only", booster: false }),
+      createCard({ id: "3", name: "Another Draft", booster: true }),
+    ]
+
+    const filtered = filterEligibleCards(cards)
+
+    expect(filtered.map((c) => c.name)).toEqual([
+      "Draft Card",
+      "Another Draft",
     ])
   })
 })

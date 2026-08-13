@@ -9,8 +9,24 @@ export type ScryfallImageUris = {
 
 export type ScryfallCardFace = {
   name?: string
+  mana_cost?: string
+  type_line?: string
+  oracle_text?: string
+  flavor_text?: string
+  power?: string
+  toughness?: string
+  loyalty?: string
+  defense?: string
+  artist?: string
+  colors?: string[]
   image_uris?: ScryfallImageUris
 }
+
+export type ScryfallLegality =
+  | "legal"
+  | "not_legal"
+  | "restricted"
+  | "banned"
 
 export type ScryfallCard = {
   id: string
@@ -19,6 +35,23 @@ export type ScryfallCard = {
   set_name: string
   collector_number: string
   rarity: string
+  mana_cost?: string
+  cmc?: number
+  type_line?: string
+  oracle_text?: string
+  flavor_text?: string
+  power?: string
+  toughness?: string
+  loyalty?: string
+  defense?: string
+  colors?: string[]
+  color_identity?: string[]
+  keywords?: string[]
+  artist?: string
+  released_at?: string
+  layout?: string
+  legalities?: Record<string, ScryfallLegality>
+  scryfall_uri?: string
   image_uris?: ScryfallImageUris
   card_faces?: ScryfallCardFace[]
   prices: {

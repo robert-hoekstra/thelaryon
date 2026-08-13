@@ -3,6 +3,7 @@
 import { useState, useTransition } from "react"
 
 import { useTranslations } from "@/components/i18n/locale-provider"
+import { toast } from "@/components/ui/toast"
 import { addToCollectionAction } from "@/lib/collection/actions"
 import type { Card } from "@/types/card"
 import type { CardCondition, CardFinish } from "@/types/collection"
@@ -58,14 +59,10 @@ export function AddToCollectionForm({
     defaultPurchasePrice != null ? defaultPurchasePrice.toFixed(2) : "",
   )
   const [purchaseDate, setPurchaseDate] = useState("")
-  const [message, setMessage] = useState<string | null>(null)
-  const [error, setError] = useState<string | null>(null)
   const [isPending, startTransition] = useTransition()
 
   function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault()
-    setMessage(null)
-    setError(null)
 
     startTransition(async () => {
       const result = await addToCollectionAction({
@@ -81,10 +78,9 @@ export function AddToCollectionForm({
         purchaseDate: purchaseDate || undefined,
       })
 
+      toast.fromActionResult(result)
       if (result.ok) {
-        setMessage(result.message)
-      } else {
-        setError(result.message)
+        setOpen(false)
       }
     })
   }
@@ -210,18 +206,6 @@ export function AddToCollectionForm({
               />
             </label>
           </div>
-
-          {message ? (
-            <p className="rounded-xl bg-mana-green/15 px-3 py-2 text-sm text-mana-green ring-1 ring-mana-green/30">
-              {message}
-            </p>
-          ) : null}
-
-          {error ? (
-            <p className="rounded-xl bg-mana-red/15 px-3 py-2 text-sm text-mana-red ring-1 ring-mana-red/30">
-              {error}
-            </p>
-          ) : null}
 
           <button
             type="submit"

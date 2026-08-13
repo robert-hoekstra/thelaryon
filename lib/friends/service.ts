@@ -108,10 +108,30 @@ export async function listFriendships(
   return result.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
 }
 
+/** Incoming pending friend requests waiting for this user. */
+export async function countIncomingPendingFriendRequests(
+  userId: string,
+): Promise<number> {
+  const rows = await db
+    .select({ count: sql<number>`count(*)::int` })
+    .from(friendships)
+    .where(
+      and(
+        eq(friendships.addresseeId, userId),
+        eq(friendships.status, "pending"),
+      ),
+    )
+
+  return rows[0]?.count ?? 0
+}
+
 export async function sendFriendRequest(
   requesterId: string,
   email: string,
-): Promise<{ ok: true; friendshipId: string } | { ok: false; code: string }> {
+): Promise<
+  | { ok: true; friendshipId: string; friendName: string }
+  | { ok: false; code: string }
+> {
   const target = await findUserByEmail(email)
 
   if (!target) {
@@ -137,7 +157,11 @@ export async function sendFriendRequest(
         .update(friendships)
         .set({ status: "pending", updatedAt: new Date() })
         .where(eq(friendships.id, existing.id))
-      return { ok: true, friendshipId: existing.id }
+      return {
+        ok: true,
+        friendshipId: existing.id,
+        friendName: target.name,
+      }
     }
   }
 
@@ -150,14 +174,20 @@ export async function sendFriendRequest(
     })
     .returning({ id: friendships.id })
 
-  return { ok: true, friendshipId: inserted[0].id }
+  return {
+    ok: true,
+    friendshipId: inserted[0].id,
+    friendName: target.name,
+  }
 }
 
 export async function respondToFriendRequest(
   userId: string,
   friendshipId: string,
   accept: boolean,
-): Promise<{ ok: true } | { ok: false; code: string }> {
+): Promise<
+  { ok: true; friendName: string } | { ok: false; code: string }
+> {
   const rows = await db
     .select()
     .from(friendships)
@@ -177,6 +207,12 @@ export async function respondToFriendRequest(
     return { ok: false, code: "not_pending" }
   }
 
+  const friendRows = await db
+    .select({ name: users.name })
+    .from(users)
+    .where(eq(users.id, friendship.requesterId))
+    .limit(1)
+
   await db
     .update(friendships)
     .set({
@@ -185,13 +221,15 @@ export async function respondToFriendRequest(
     })
     .where(eq(friendships.id, friendshipId))
 
-  return { ok: true }
+  return { ok: true, friendName: friendRows[0]?.name ?? "Friend" }
 }
 
 export async function removeFriendship(
   userId: string,
   friendshipId: string,
-): Promise<{ ok: true } | { ok: false; code: string }> {
+): Promise<
+  { ok: true; friendName: string } | { ok: false; code: string }
+> {
   const rows = await db
     .select()
     .from(friendships)
@@ -210,8 +248,19 @@ export async function removeFriendship(
     return { ok: false, code: "forbidden" }
   }
 
+  const friendId =
+    friendship.requesterId === userId
+      ? friendship.addresseeId
+      : friendship.requesterId
+
+  const friendRows = await db
+    .select({ name: users.name })
+    .from(users)
+    .where(eq(users.id, friendId))
+    .limit(1)
+
   await db.delete(friendships).where(eq(friendships.id, friendshipId))
-  return { ok: true }
+  return { ok: true, friendName: friendRows[0]?.name ?? "Friend" }
 }
 
 type AggregateCard = {
@@ -306,6 +355,7 @@ export async function compareCollections(
   const missingForMe: CollectionCompareCard[] = []
   const theirExtrasINeed: CollectionCompareCard[] = []
   const missingForThem: CollectionCompareCard[] = []
+  const myExtrasTheyNeed: CollectionCompareCard[] = []
 
   for (const [scryfallId, friendCard] of friendMap) {
     const myQty = myMap.get(scryfallId)?.quantity ?? 0
@@ -321,7 +371,11 @@ export async function compareCollections(
   for (const [scryfallId, myCard] of myMap) {
     const friendQty = friendMap.get(scryfallId)?.quantity ?? 0
     if (friendQty > 0) continue
-    missingForThem.push(toCompareCard(myCard, myCard.quantity, 0))
+    const compare = toCompareCard(myCard, myCard.quantity, 0)
+    missingForThem.push(compare)
+    if (myCard.quantity >= 2) {
+      myExtrasTheyNeed.push(compare)
+    }
   }
 
   const byName = (a: CollectionCompareCard, b: CollectionCompareCard) =>
@@ -330,16 +384,19 @@ export async function compareCollections(
   missingForMe.sort(byName)
   theirExtrasINeed.sort(byName)
   missingForThem.sort(byName)
+  myExtrasTheyNeed.sort(byName)
 
   return {
     friend: mapFriendUser(friend),
     missingForMe,
     theirExtrasINeed,
     missingForThem,
+    myExtrasTheyNeed,
     summary: {
       missingForMeCount: missingForMe.length,
       theirExtrasINeedCount: theirExtrasINeed.length,
       missingForThemCount: missingForThem.length,
+      myExtrasTheyNeedCount: myExtrasTheyNeed.length,
     },
   }
 }

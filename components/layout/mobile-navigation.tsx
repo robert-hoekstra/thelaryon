@@ -4,9 +4,16 @@ import Link from "next/link"
 import { usePathname } from "next/navigation"
 
 import { useTranslations } from "@/components/i18n/locale-provider"
+import { NavBadge } from "@/components/layout/nav-badge"
 import { cn } from "@/lib/utils"
 
-export function MobileNavigation() {
+type MobileNavigationProps = {
+  pendingFriendRequests?: number
+}
+
+export function MobileNavigation({
+  pendingFriendRequests = 0,
+}: MobileNavigationProps) {
   const pathname = usePathname()
   const t = useTranslations()
 
@@ -15,7 +22,11 @@ export function MobileNavigation() {
     { href: "/collection", label: t("nav.collection") },
     { href: "/binders", label: t("nav.binders") },
     { href: "/sets", label: t("nav.sets") },
-    { href: "/search", label: t("nav.search") },
+    {
+      href: "/friends",
+      label: t("nav.friends"),
+      badge: pendingFriendRequests,
+    },
   ] as const
 
   return (
@@ -30,19 +41,26 @@ export function MobileNavigation() {
             item.href === "/"
               ? pathname === "/"
               : pathname.startsWith(item.href)
+          const badge = "badge" in item ? item.badge : 0
 
           return (
             <li key={item.href}>
               <Link
                 href={item.href}
                 className={cn(
-                  "flex flex-col items-center rounded-lg px-1 py-2 text-[11px] font-medium transition-colors",
+                  "relative flex flex-col items-center rounded-lg px-1 py-2 text-[11px] font-medium transition-colors",
                   isActive
                     ? "bg-accent text-white"
                     : "bg-transparent text-ink/70 hover:bg-surface-elevated hover:text-ink",
                 )}
               >
-                {item.label}
+                <span className="relative inline-flex">
+                  {item.label}
+                  <NavBadge
+                    count={badge ?? 0}
+                    label={t("nav.pendingFriendsBadge", { count: badge ?? 0 })}
+                  />
+                </span>
               </Link>
             </li>
           )

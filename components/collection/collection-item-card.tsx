@@ -7,6 +7,7 @@ import { useState, useTransition } from "react"
 import { CardImage } from "@/components/cards/card-image"
 import { CardTilt } from "@/components/cards/card-tilt"
 import { useLocale, useTranslations } from "@/components/i18n/locale-provider"
+import { toast } from "@/components/ui/toast"
 import {
   deleteCollectionItemAction,
   updateCollectionItemAction,
@@ -42,8 +43,6 @@ export function CollectionItemCard({ item }: CollectionItemCardProps) {
   const router = useRouter()
   const [isPending, startTransition] = useTransition()
   const [isEditing, setIsEditing] = useState(false)
-  const [error, setError] = useState<string | null>(null)
-  const [message, setMessage] = useState<string | null>(null)
 
   const [quantity, setQuantity] = useState(item.quantity)
   const [condition, setCondition] = useState<CardCondition>(item.condition)
@@ -61,29 +60,21 @@ export function CollectionItemCard({ item }: CollectionItemCardProps) {
   ]
 
   function handleDelete() {
-    setError(null)
-    setMessage(null)
-
     startTransition(async () => {
       try {
         const result = await deleteCollectionItemAction(item.id)
-
-        if (!result.ok) {
-          setError(result.message)
-          return
+        toast.fromActionResult(result)
+        if (result.ok) {
+          router.refresh()
         }
-
-        router.refresh()
       } catch {
-        setError(t("collectionItem.deleteFailed"))
+        toast.error(t("collectionItem.deleteFailed"))
       }
     })
   }
 
   function handleSave(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault()
-    setError(null)
-    setMessage(null)
 
     startTransition(async () => {
       try {
@@ -97,16 +88,13 @@ export function CollectionItemCard({ item }: CollectionItemCardProps) {
               : Number.parseFloat(purchasePrice),
         })
 
-        if (!result.ok) {
-          setError(result.message)
-          return
+        toast.fromActionResult(result)
+        if (result.ok) {
+          setIsEditing(false)
+          router.refresh()
         }
-
-        setMessage(result.message)
-        setIsEditing(false)
-        router.refresh()
       } catch {
-        setError(t("collectionItem.updateFailed"))
+        toast.error(t("collectionItem.updateFailed"))
       }
     })
   }
@@ -228,7 +216,6 @@ export function CollectionItemCard({ item }: CollectionItemCardProps) {
                 disabled={isPending}
                 onClick={() => {
                   setIsEditing(false)
-                  setError(null)
                   setQuantity(item.quantity)
                   setCondition(item.condition)
                   setFinish(item.finish)
@@ -286,8 +273,6 @@ export function CollectionItemCard({ item }: CollectionItemCardProps) {
                 type="button"
                 onClick={() => {
                   setIsEditing(true)
-                  setError(null)
-                  setMessage(null)
                 }}
                 disabled={isPending}
                 className="flex-1 rounded-full bg-accent px-3 py-2 text-xs font-semibold text-white transition hover:bg-accent/85 disabled:opacity-60"
@@ -307,18 +292,6 @@ export function CollectionItemCard({ item }: CollectionItemCardProps) {
             </div>
           </>
         )}
-
-        {message ? (
-          <p className="rounded-lg bg-mana-green/10 px-2 py-1.5 text-xs text-mana-green ring-1 ring-mana-green/30">
-            {message}
-          </p>
-        ) : null}
-
-        {error ? (
-          <p className="rounded-lg bg-mana-red/15 px-2 py-1.5 text-xs text-mana-red ring-1 ring-mana-red/30">
-            {error}
-          </p>
-        ) : null}
       </div>
     </article>
   )

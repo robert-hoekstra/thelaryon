@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation"
 import { useTransition } from "react"
 
 import { useTranslations } from "@/components/i18n/locale-provider"
+import { toast } from "@/components/ui/toast"
 import {
   acceptFriendRequestAction,
   declineFriendRequestAction,
@@ -29,9 +30,10 @@ export function FriendshipList({ friendships }: FriendshipListProps) {
   )
   const accepted = friendships.filter((item) => item.status === "accepted")
 
-  function runAction(action: () => Promise<{ ok: boolean }>) {
+  function runAction(action: () => Promise<{ ok: boolean; message: string }>) {
     startTransition(async () => {
-      await action()
+      const result = await action()
+      toast.fromActionResult(result)
       router.refresh()
     })
   }

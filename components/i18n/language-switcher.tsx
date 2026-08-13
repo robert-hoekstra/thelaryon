@@ -16,11 +16,7 @@ const options: {
   { value: "nl", flag: "🇳🇱", labelKey: "profile.languageNl" },
 ]
 
-type LanguageSwitcherProps = {
-  compact?: boolean
-}
-
-export function LanguageSwitcher({ compact = false }: LanguageSwitcherProps) {
+export function LanguageSwitcher() {
   const { locale, t } = useLocale()
   const [isPending, startTransition] = useTransition()
 
@@ -29,34 +25,6 @@ export function LanguageSwitcher({ compact = false }: LanguageSwitcherProps) {
     startTransition(async () => {
       await setLocaleAction(next)
     })
-  }
-
-  if (compact) {
-    return (
-      <div
-        role="group"
-        aria-label={t("nav.language")}
-        className="flex items-center gap-0.5 rounded-full bg-surface-elevated p-0.5 ring-1 ring-ink/15"
-      >
-        {options.map((option) => (
-          <button
-            key={option.value}
-            type="button"
-            disabled={isPending}
-            onClick={() => select(option.value)}
-            aria-label={t(option.labelKey)}
-            className={cn(
-              "rounded-full px-1.5 py-1 text-base transition",
-              locale === option.value
-                ? "bg-accent/20 ring-1 ring-accent/40"
-                : "opacity-60 hover:opacity-100",
-            )}
-          >
-            {option.flag}
-          </button>
-        ))}
-      </div>
-    )
   }
 
   return (

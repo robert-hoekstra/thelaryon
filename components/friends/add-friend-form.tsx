@@ -3,27 +3,22 @@
 import { useState, useTransition } from "react"
 
 import { useTranslations } from "@/components/i18n/locale-provider"
+import { toast } from "@/components/ui/toast"
 import { sendFriendRequestAction } from "@/lib/friends/actions"
 
 export function AddFriendForm() {
   const t = useTranslations()
   const [email, setEmail] = useState("")
-  const [message, setMessage] = useState<string | null>(null)
-  const [error, setError] = useState<string | null>(null)
   const [isPending, startTransition] = useTransition()
 
   function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault()
-    setMessage(null)
-    setError(null)
 
     startTransition(async () => {
       const result = await sendFriendRequestAction(email)
+      toast.fromActionResult(result)
       if (result.ok) {
-        setMessage(result.message)
         setEmail("")
-      } else {
-        setError(result.message)
       }
     })
   }
@@ -49,18 +44,6 @@ export function AddFriendForm() {
           className="w-full rounded-xl border border-ink/20 bg-surface px-3 py-2 text-ink outline-none placeholder:text-ink-soft focus:border-accent focus:ring-4 focus:ring-accent/25"
         />
       </label>
-
-      {message ? (
-        <p className="rounded-xl bg-mana-green/15 px-3 py-2 text-sm text-mana-green ring-1 ring-mana-green/30">
-          {message}
-        </p>
-      ) : null}
-
-      {error ? (
-        <p className="rounded-xl bg-mana-red/15 px-3 py-2 text-sm text-mana-red ring-1 ring-mana-red/30">
-          {error}
-        </p>
-      ) : null}
 
       <button
         type="submit"

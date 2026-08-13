@@ -4,6 +4,7 @@ import Link from "next/link"
 import { useState, useTransition } from "react"
 
 import { useTranslations } from "@/components/i18n/locale-provider"
+import { toast } from "@/components/ui/toast"
 import { addToCollectionAction } from "@/lib/collection/actions"
 import type { Card } from "@/types/card"
 import type { CardFinish } from "@/types/collection"
@@ -33,7 +34,6 @@ export function CardQuickActions({
 }: CardQuickActionsProps) {
   const t = useTranslations()
   const [pendingFinish, setPendingFinish] = useState<CardFinish | null>(null)
-  const [feedback, setFeedback] = useState<"ok" | "error" | null>(null)
   const [isPending, startTransition] = useTransition()
 
   const availableFinishes = card.finishes
@@ -57,7 +57,6 @@ export function CardQuickActions({
   }
 
   function quickAdd(finish: CardFinish) {
-    setFeedback(null)
     setPendingFinish(finish)
 
     startTransition(async () => {
@@ -70,11 +69,7 @@ export function CardQuickActions({
       })
 
       setPendingFinish(null)
-      setFeedback(result.ok ? "ok" : "error")
-
-      if (result.ok) {
-        window.setTimeout(() => setFeedback(null), 1800)
-      }
+      toast.fromActionResult(result)
     })
   }
 
@@ -121,18 +116,6 @@ export function CardQuickActions({
           )
         })}
       </div>
-
-      {feedback === "ok" ? (
-        <p className="text-[11px] font-medium text-mana-green">
-          {t("quickAdd.addedCompact")}
-        </p>
-      ) : null}
-
-      {feedback === "error" ? (
-        <p className="text-[11px] font-medium text-mana-red">
-          {t("quickAdd.failedCompact")}
-        </p>
-      ) : null}
     </div>
   )
 }

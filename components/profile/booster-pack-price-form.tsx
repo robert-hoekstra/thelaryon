@@ -2,8 +2,9 @@
 
 import { useState, useTransition } from "react"
 
-import { updateBoosterPackPriceAction } from "@/app/profile/actions"
 import { useTranslations } from "@/components/i18n/locale-provider"
+import { toast } from "@/components/ui/toast"
+import { updateBoosterPackPriceAction } from "@/app/profile/actions"
 import { CARDS_PER_BOOSTER } from "@/lib/user/constants"
 
 type BoosterPackPriceFormProps = {
@@ -17,8 +18,6 @@ export function BoosterPackPriceForm({
   const [value, setValue] = useState(
     initialPrice != null ? String(initialPrice) : "",
   )
-  const [message, setMessage] = useState<string | null>(null)
-  const [error, setError] = useState<string | null>(null)
   const [isPending, startTransition] = useTransition()
 
   const parsed = value.trim() === "" ? null : Number.parseFloat(value)
@@ -29,8 +28,6 @@ export function BoosterPackPriceForm({
 
   function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault()
-    setMessage(null)
-    setError(null)
 
     const nextPrice =
       value.trim() === ""
@@ -38,7 +35,7 @@ export function BoosterPackPriceForm({
         : Number.parseFloat(value)
 
     if (nextPrice != null && (!Number.isFinite(nextPrice) || nextPrice < 0)) {
-      setError(t("profile.boosterPriceInvalid"))
+      toast.error(t("profile.boosterPriceInvalid"))
       return
     }
 
@@ -46,12 +43,7 @@ export function BoosterPackPriceForm({
       const result = await updateBoosterPackPriceAction({
         boosterPackPrice: nextPrice,
       })
-
-      if (result.ok) {
-        setMessage(result.message)
-      } else {
-        setError(result.message)
-      }
+      toast.fromActionResult(result)
     })
   }
 
@@ -89,18 +81,6 @@ export function BoosterPackPriceForm({
           {t("profile.boosterPricePerCard", {
             price: perCard.toFixed(2),
           })}
-        </p>
-      ) : null}
-
-      {message ? (
-        <p className="rounded-xl bg-mana-green/15 px-3 py-2 text-sm text-mana-green ring-1 ring-mana-green/30">
-          {message}
-        </p>
-      ) : null}
-
-      {error ? (
-        <p className="rounded-xl bg-mana-red/15 px-3 py-2 text-sm text-mana-red ring-1 ring-mana-red/30">
-          {error}
         </p>
       ) : null}
 

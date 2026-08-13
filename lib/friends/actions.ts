@@ -58,6 +58,11 @@ function friendErrorMessage(
   }
 }
 
+function revalidateFriends() {
+  revalidatePath("/friends")
+  revalidatePath("/", "layout")
+}
+
 export async function sendFriendRequestAction(
   email: string,
 ): Promise<FriendActionResult> {
@@ -75,8 +80,11 @@ export async function sendFriendRequestAction(
     return { ok: false, message: friendErrorMessage(result.code, t) }
   }
 
-  revalidatePath("/friends")
-  return { ok: true, message: t("friends.requestSent") }
+  revalidateFriends()
+  return {
+    ok: true,
+    message: t("friends.requestSentNamed", { name: result.friendName }),
+  }
 }
 
 export async function acceptFriendRequestAction(
@@ -91,8 +99,11 @@ export async function acceptFriendRequestAction(
     return { ok: false, message: friendErrorMessage(result.code, t) }
   }
 
-  revalidatePath("/friends")
-  return { ok: true, message: t("friends.requestAccepted") }
+  revalidateFriends()
+  return {
+    ok: true,
+    message: t("friends.requestAcceptedNamed", { name: result.friendName }),
+  }
 }
 
 export async function declineFriendRequestAction(
@@ -107,8 +118,11 @@ export async function declineFriendRequestAction(
     return { ok: false, message: friendErrorMessage(result.code, t) }
   }
 
-  revalidatePath("/friends")
-  return { ok: true, message: t("friends.requestDeclined") }
+  revalidateFriends()
+  return {
+    ok: true,
+    message: t("friends.requestDeclinedNamed", { name: result.friendName }),
+  }
 }
 
 export async function removeFriendAction(
@@ -123,6 +137,9 @@ export async function removeFriendAction(
     return { ok: false, message: friendErrorMessage(result.code, t) }
   }
 
-  revalidatePath("/friends")
-  return { ok: true, message: t("friends.removed") }
+  revalidateFriends()
+  return {
+    ok: true,
+    message: t("friends.removedNamed", { name: result.friendName }),
+  }
 }

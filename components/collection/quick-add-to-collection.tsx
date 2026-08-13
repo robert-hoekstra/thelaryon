@@ -3,6 +3,7 @@
 import { useState, useTransition } from "react"
 
 import { useLocale, useTranslations } from "@/components/i18n/locale-provider"
+import { toast } from "@/components/ui/toast"
 import { addToCollectionAction } from "@/lib/collection/actions"
 import { formatEuroPrice, getCardPrice } from "@/lib/pricing/price"
 import type { Card } from "@/types/card"
@@ -38,8 +39,6 @@ export function QuickAddToCollection({ card }: QuickAddToCollectionProps) {
       ? availableFinishes
       : (["NON_FOIL"] as CardFinish[])
 
-  const [message, setMessage] = useState<string | null>(null)
-  const [error, setError] = useState<string | null>(null)
   const [pendingFinish, setPendingFinish] = useState<CardFinish | null>(null)
   const [isPending, startTransition] = useTransition()
 
@@ -55,8 +54,6 @@ export function QuickAddToCollection({ card }: QuickAddToCollectionProps) {
   }
 
   function quickAdd(finish: CardFinish) {
-    setMessage(null)
-    setError(null)
     setPendingFinish(finish)
 
     startTransition(async () => {
@@ -69,12 +66,7 @@ export function QuickAddToCollection({ card }: QuickAddToCollectionProps) {
       })
 
       setPendingFinish(null)
-
-      if (result.ok) {
-        setMessage(result.message)
-      } else {
-        setError(result.message)
-      }
+      toast.fromActionResult(result)
     })
   }
 
@@ -111,18 +103,6 @@ export function QuickAddToCollection({ card }: QuickAddToCollectionProps) {
           )
         })}
       </div>
-
-      {message ? (
-        <p className="rounded-xl bg-mana-green/20 px-3 py-2 text-sm text-mana-green ring-1 ring-mana-green/40">
-          {message}
-        </p>
-      ) : null}
-
-      {error ? (
-        <p className="rounded-xl bg-mana-red/20 px-3 py-2 text-sm text-mana-red ring-1 ring-mana-red/40">
-          {error}
-        </p>
-      ) : null}
     </div>
   )
 }

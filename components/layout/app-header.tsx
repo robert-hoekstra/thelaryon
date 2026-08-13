@@ -1,9 +1,12 @@
 import Link from "next/link"
 
-import { LanguageSwitcher } from "@/components/i18n/language-switcher"
 import { DesktopNavigation } from "./desktop-navigation"
 
-export function AppHeader() {
+type AppHeaderProps = {
+  pendingFriendRequests?: number
+}
+
+export function AppHeader({ pendingFriendRequests = 0 }: AppHeaderProps) {
   return (
     <header className="sticky top-0 z-30 border-b border-ink/10 bg-surface/90 backdrop-blur-md">
       <div className="mx-auto flex h-14 max-w-6xl items-center justify-between gap-3 px-4">
@@ -24,10 +27,7 @@ export function AppHeader() {
             </span>
           </span>
         </Link>
-        <div className="flex items-center gap-3">
-          <LanguageSwitcher compact />
-          <DesktopNavigation />
-        </div>
+        <DesktopNavigation pendingFriendRequests={pendingFriendRequests} />
       </div>
       <div className="mana-ribbon" aria-hidden />
     </header>

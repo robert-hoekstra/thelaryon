@@ -5,7 +5,9 @@ import { eq } from "drizzle-orm"
 import { db } from "@/lib/db"
 import { collectionItems, users } from "@/lib/db/schema"
 import { areAcceptedFriends } from "@/lib/friends/service"
+import { getCardPrice } from "@/lib/pricing/price"
 import { getCardsBySet, getSetByCode } from "@/lib/scryfall/client"
+import { buildTradePlan, type TradePlan } from "@/lib/trades/trade-plan"
 import type { FriendUser } from "@/types/friends"
 import type { CardSet } from "@/types/set"
 
@@ -20,6 +22,7 @@ export type SetComparisonCard = {
   image?: string
   myQuantity: number
   friendQuantity: number
+  marketPrice: number | null
   status: "both" | "only_me" | "only_friend" | "neither"
 }
 
@@ -47,6 +50,7 @@ export type SetComparisonResult = {
     iNeed: SetComparisonCard[]
     theyNeed: SetComparisonCard[]
   }
+  tradePlan: TradePlan
 }
 
 type CollectionMap = Map<string, number>
@@ -159,6 +163,7 @@ export async function compareSetCollections(
       image: card.image.normal ?? card.image.small,
       myQuantity: myQty,
       friendQuantity: friendQty,
+      marketPrice: getCardPrice(card),
       status,
     }
 
@@ -176,6 +181,27 @@ export async function compareSetCollections(
   }
 
   const totalCards = sortedCards.length
+
+  const tradePlan = buildTradePlan({
+    theyOffer: iNeed.map((card) => ({
+      scryfallId: card.scryfallId,
+      name: card.name,
+      collectorNumber: card.collectorNumber,
+      setCode: set.code,
+      image: card.image,
+      extras: Math.max(0, card.friendQuantity - 1),
+      marketPrice: card.marketPrice,
+    })),
+    youOffer: theyNeed.map((card) => ({
+      scryfallId: card.scryfallId,
+      name: card.name,
+      collectorNumber: card.collectorNumber,
+      setCode: set.code,
+      image: card.image,
+      extras: Math.max(0, card.myQuantity - 1),
+      marketPrice: card.marketPrice,
+    })),
+  })
 
   return {
     set,
@@ -201,6 +227,7 @@ export async function compareSetCollections(
       iNeed,
       theyNeed,
     },
+    tradePlan,
   }
 }
 

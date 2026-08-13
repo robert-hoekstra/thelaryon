@@ -7,6 +7,7 @@ import { auth } from "@/lib/auth/server"
 import {
   addCollectionItem,
   deleteCollectionItem,
+  getCollectionItemById,
   updateCollectionItem,
 } from "@/lib/collection/service"
 import { getTranslator } from "@/lib/i18n/get-locale"
@@ -124,7 +125,7 @@ export async function updateCollectionItemAction(
 
     return {
       ok: true,
-      message: t("action.updated"),
+      message: t("action.updatedNamed", { name: item.name }),
     }
   } catch (error) {
     console.error("updateCollectionItemAction failed", error)
@@ -145,6 +146,14 @@ export async function deleteCollectionItemAction(
   }
 
   try {
+    const existing = await getCollectionItemById(id, user.userId)
+    if (!existing) {
+      return {
+        ok: false,
+        message: t("action.itemNotFound"),
+      }
+    }
+
     const deleted = await deleteCollectionItem(id, user.userId)
 
     if (!deleted) {
@@ -160,7 +169,7 @@ export async function deleteCollectionItemAction(
 
     return {
       ok: true,
-      message: t("action.deleted"),
+      message: t("action.deletedNamed", { name: existing.name }),
     }
   } catch (error) {
     console.error("deleteCollectionItemAction failed", error)

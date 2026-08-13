@@ -6,37 +6,66 @@ import { useState } from "react"
 import { CardImage } from "@/components/cards/card-image"
 import { CardTilt } from "@/components/cards/card-tilt"
 import { useTranslations } from "@/components/i18n/locale-provider"
+import { TradePlanView } from "@/components/trades/trade-plan-view"
+import type { Locale } from "@/lib/i18n/config"
 import type { SetComparisonCard, SetComparisonResult } from "@/lib/sets/compare"
 import { cn } from "@/lib/utils"
 
 import { SetCompareSelector } from "./set-compare-selector"
 import { SetProgressBar } from "./set-progress-bar"
 
-type FilterMode = "all" | "both" | "only_me" | "only_friend" | "neither"
+type FilterMode =
+  | "all"
+  | "both"
+  | "only_me"
+  | "only_friend"
+  | "neither"
+  | "tradeable"
 
 type SetComparisonViewProps = {
   comparison: SetComparisonResult
   setCode: string
   friends: { id: string; name: string }[]
+  locale: Locale
 }
 
 export function SetComparisonView({
   comparison,
   setCode,
   friends,
+  locale,
 }: SetComparisonViewProps) {
   const t = useTranslations()
-  const [filter, setFilter] = useState<FilterMode>("all")
+  const [filter, setFilter] = useState<FilterMode>("tradeable")
 
-  const { set, friend, cards, myCompletion, friendCompletion, summary, potentialTrades } =
-    comparison
+  const {
+    set,
+    friend,
+    cards,
+    myCompletion,
+    friendCompletion,
+    summary,
+    potentialTrades,
+    tradePlan,
+  } = comparison
+
+  const tradeableIds = new Set([
+    ...potentialTrades.iNeed.map((card) => card.scryfallId),
+    ...potentialTrades.theyNeed.map((card) => card.scryfallId),
+  ])
 
   const filteredCards = cards.filter((card) => {
     if (filter === "all") return true
+    if (filter === "tradeable") return tradeableIds.has(card.scryfallId)
     return card.status === filter
   })
 
   const filters: { key: FilterMode; label: string; count: number }[] = [
+    {
+      key: "tradeable",
+      label: t("setCompare.filterTradeable"),
+      count: tradeableIds.size,
+    },
     { key: "all", label: t("setDetail.filterAll"), count: cards.length },
     { key: "both", label: t("setCompare.bothOwn"), count: summary.bothOwn },
     { key: "only_me", label: t("setCompare.onlyYou"), count: summary.onlyMe },
@@ -89,6 +118,13 @@ export function SetComparisonView({
           />
         </div>
       </div>
+
+      <TradePlanView
+        plan={tradePlan}
+        friendName={friend.name}
+        locale={locale}
+        setName={set.name}
+      />
 
       {/* Completion comparison */}
       <div className="grid gap-4 sm:grid-cols-2">
@@ -162,71 +198,6 @@ export function SetComparisonView({
           </div>
         ))}
       </div>
-
-      {/* Potential trades */}
-      {(potentialTrades.iNeed.length > 0 || potentialTrades.theyNeed.length > 0) && (
-        <div className="rounded-2xl border border-accent/25 bg-accent/10 p-5 ring-1 ring-accent/15">
-          <h2 className="font-semibold text-ink">
-            {t("setCompare.potentialTrades")}
-          </h2>
-          <div className="mt-4 grid gap-4 sm:grid-cols-2">
-            {potentialTrades.iNeed.length > 0 && (
-              <div>
-                <h3 className="text-sm font-medium text-ink-soft">
-                  {t("setCompare.youNeed")} ({potentialTrades.iNeed.length})
-                </h3>
-                <ul className="mt-2 space-y-1">
-                  {potentialTrades.iNeed.slice(0, 5).map((card) => (
-                    <li
-                      key={card.scryfallId}
-                      className="flex items-center justify-between text-sm"
-                    >
-                      <span className="text-ink">
-                        #{card.collectorNumber} {card.name}
-                      </span>
-                      <span className="text-xs text-ink-soft">
-                        {t("setCompare.theyHave", { count: card.friendQuantity })}
-                      </span>
-                    </li>
-                  ))}
-                  {potentialTrades.iNeed.length > 5 && (
-                    <li className="text-xs text-ink-soft">
-                      +{potentialTrades.iNeed.length - 5} more…
-                    </li>
-                  )}
-                </ul>
-              </div>
-            )}
-            {potentialTrades.theyNeed.length > 0 && (
-              <div>
-                <h3 className="text-sm font-medium text-ink-soft">
-                  {t("setCompare.theyNeed")} ({potentialTrades.theyNeed.length})
-                </h3>
-                <ul className="mt-2 space-y-1">
-                  {potentialTrades.theyNeed.slice(0, 5).map((card) => (
-                    <li
-                      key={card.scryfallId}
-                      className="flex items-center justify-between text-sm"
-                    >
-                      <span className="text-ink">
-                        #{card.collectorNumber} {card.name}
-                      </span>
-                      <span className="text-xs text-ink-soft">
-                        {t("setCompare.youHave", { count: card.myQuantity })}
-                      </span>
-                    </li>
-                  ))}
-                  {potentialTrades.theyNeed.length > 5 && (
-                    <li className="text-xs text-ink-soft">
-                      +{potentialTrades.theyNeed.length - 5} more…
-                    </li>
-                  )}
-                </ul>
-              </div>
-            )}
-          </div>
-        </div>
-      )}
 
       {/* Filter buttons */}
       <div className="flex flex-wrap gap-2">

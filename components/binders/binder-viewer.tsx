@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation"
 
 import { CardImage } from "@/components/cards/card-image"
 import { useTranslations } from "@/components/i18n/locale-provider"
+import { toast } from "@/components/ui/toast"
 import { assignBinderSlotAction } from "@/lib/binders/actions"
 import {
   fromDisplayPageNumber,
@@ -289,7 +290,6 @@ function AssignSlotDialog({
   const t = useTranslations()
   const router = useRouter()
   const [query, setQuery] = useState("")
-  const [error, setError] = useState<string | null>(null)
   const [isPending, startTransition] = useTransition()
 
   const matches = useMemo(() => {
@@ -313,15 +313,12 @@ function AssignSlotDialog({
   }, [collectionItems, query, slot.expectedScryfallId])
 
   function assign(collectionItemId: string | null) {
-    setError(null)
     startTransition(async () => {
       const result = await assignBinderSlotAction(slot.id, binderId, {
         collectionItemId,
       })
-      if (!result.ok) {
-        setError(result.message)
-        return
-      }
+      toast.fromActionResult(result)
+      if (!result.ok) return
       onClose()
       router.refresh()
     })
@@ -439,11 +436,6 @@ function AssignSlotDialog({
             </ul>
           )}
 
-          {error ? (
-            <p className="rounded-xl bg-mana-red/15 px-3 py-2 text-sm text-mana-red ring-1 ring-mana-red/30">
-              {error}
-            </p>
-          ) : null}
         </div>
       </div>
     </div>

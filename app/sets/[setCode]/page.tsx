@@ -94,6 +94,7 @@ export default async function SetDetailPage({
         comparison={comparison}
         setCode={setCode}
         friends={friends}
+        locale={locale}
       />
     )
   }

@@ -32,9 +32,11 @@ export type CollectionCompareResult = {
   missingForMe: CollectionCompareCard[]
   theirExtrasINeed: CollectionCompareCard[]
   missingForThem: CollectionCompareCard[]
+  myExtrasTheyNeed: CollectionCompareCard[]
   summary: {
     missingForMeCount: number
     theirExtrasINeedCount: number
     missingForThemCount: number
+    myExtrasTheyNeedCount: number
   }
 }

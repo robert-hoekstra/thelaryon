@@ -6,6 +6,7 @@ import { mapScryfallCard, mapScryfallSet } from "./mapper"
 import type {
   ScryfallCard,
   ScryfallCardListResponse,
+  ScryfallCollectionResponse,
   ScryfallErrorResponse,
   ScryfallListResponse,
   ScryfallSet,
@@ -264,4 +265,75 @@ export async function getCardsBySet(setCode: string): Promise<Card[]> {
   }
 
   return allCards
+}
+
+const COLLECTION_BATCH_SIZE = 75
+const COLLECTION_BATCH_DELAY_MS = 550
+
+function uniqueIds(ids: string[]): string[] {
+  return [...new Set(ids.filter(Boolean))]
+}
+
+async function delay(ms: number): Promise<void> {
+  await new Promise((resolve) => {
+    setTimeout(resolve, ms)
+  })
+}
+
+async function scryfallPost<T>(path: string, body: unknown): Promise<T> {
+  const response = await fetch(`${SCRYFALL_API_BASE}${path}`, {
+    method: "POST",
+    headers: {
+      Accept: ACCEPT_HEADER,
+      "Content-Type": "application/json",
+      "User-Agent": USER_AGENT,
+    },
+    body: JSON.stringify(body),
+    cache: "no-store",
+  })
+
+  if (!response.ok) {
+    let message = `Scryfall request failed (${response.status})`
+
+    try {
+      const errorBody = (await response.json()) as ScryfallErrorResponse
+      if (errorBody.details) {
+        message = errorBody.details
+      }
+    } catch {
+      // Keep the default message when the body is not JSON.
+    }
+
+    throw new ScryfallApiError(message, response.status)
+  }
+
+  return (await response.json()) as T
+}
+
+/**
+ * Resolve many cards by Scryfall id via the collection endpoint (max 75 per call).
+ */
+export async function getCardsByIds(ids: string[]): Promise<Card[]> {
+  const unique = uniqueIds(ids)
+  if (unique.length === 0) {
+    return []
+  }
+
+  const cards: Card[] = []
+
+  for (let index = 0; index < unique.length; index += COLLECTION_BATCH_SIZE) {
+    if (index > 0) {
+      await delay(COLLECTION_BATCH_DELAY_MS)
+    }
+
+    const batch = unique.slice(index, index + COLLECTION_BATCH_SIZE)
+    const result = await scryfallPost<ScryfallCollectionResponse>(
+      "/cards/collection",
+      { identifiers: batch.map((id) => ({ id })) },
+    )
+
+    cards.push(...result.data.map(mapScryfallCard))
+  }
+
+  return cards
 }

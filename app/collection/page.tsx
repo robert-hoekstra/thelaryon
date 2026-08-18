@@ -49,12 +49,20 @@ export default async function CollectionPage() {
             {t("collection.description")}
           </p>
         </div>
-        <Link
-          href="/search"
-          className="inline-flex items-center justify-center rounded-full bg-accent px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-accent/85"
-        >
-          {t("collection.searchCards")}
-        </Link>
+        <div className="flex flex-wrap gap-2">
+          <Link
+            href="/collection/precon"
+            className="inline-flex items-center justify-center rounded-full bg-surface-elevated px-5 py-2.5 text-sm font-semibold text-ink ring-1 ring-ink/15 transition hover:bg-surface"
+          >
+            {t("collection.addPrecon")}
+          </Link>
+          <Link
+            href="/search"
+            className="inline-flex items-center justify-center rounded-full bg-accent px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-accent/85"
+          >
+            {t("collection.searchCards")}
+          </Link>
+        </div>
       </div>
 
       <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
@@ -107,6 +115,12 @@ export default async function CollectionPage() {
             {t("collection.emptyDescription")}
           </p>
           <div className="mt-5 flex flex-wrap justify-center gap-3">
+            <Link
+              href="/collection/precon"
+              className="inline-flex items-center justify-center rounded-full bg-surface-elevated px-5 py-2.5 text-sm font-semibold text-ink ring-1 ring-ink/15 transition hover:bg-surface"
+            >
+              {t("collection.addPrecon")}
+            </Link>
             <Link
               href="/search"
               className="inline-flex items-center justify-center rounded-full bg-accent px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-accent/85"

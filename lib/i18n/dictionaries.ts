@@ -50,6 +50,7 @@ const en = {
   "collection.description":
     "Your Magic: The Gathering collection. Add cards via search or card detail pages.",
   "collection.searchCards": "Search cards",
+  "collection.addPrecon": "Add precon deck",
   "collection.statCards": "Cards",
   "collection.statUnique": "Unique",
   "collection.statCollectionValue": "Collection value",
@@ -72,6 +73,41 @@ const en = {
   "collection.paginationLabel": "Collection pages",
   "collection.prevPage": "Previous",
   "collection.nextPage": "Next",
+
+  "precon.title": "Add a precon deck",
+  "precon.description":
+    "Search official preconstructed decks and add every card to your collection at once.",
+  "precon.back": "← Back to collection",
+  "precon.searchLabel": "Search preconstructed decks",
+  "precon.searchPlaceholder": "Search by deck name, set code, or type…",
+  "precon.searchHint":
+    "Official Commander, starter, Jumpstart, and other preconstructed decks.",
+  "precon.idleTitle": "Find a deck",
+  "precon.idleDescription":
+    "Type a deck name such as “Abzan Armor” or a set code like TDC.",
+  "precon.searching": "Searching for “{query}”…",
+  "precon.searchErrorTitle": "Search failed",
+  "precon.searchFailed": "Could not search decks. Please try again.",
+  "precon.emptyTitle": "No decks found",
+  "precon.emptyDescription":
+    "No preconstructed decks found for “{query}”. Try another name or set code.",
+  "precon.loadingDeck": "Loading deck list…",
+  "precon.fetchFailed": "Could not load that deck.",
+  "precon.notFound": "That preconstructed deck was not found.",
+  "precon.tooLarge": "This deck is too large to add in one step.",
+  "precon.emptyDeck": "This deck has no cards to add.",
+  "precon.addFailed": "Could not add the deck. Please try again.",
+  "precon.addNone": "None of the cards in this deck could be added.",
+  "precon.added": "Added {count} cards from {name}.",
+  "precon.addedPartial":
+    "Added {added} cards from {name}. {skipped} printings could not be matched.",
+  "precon.commanders": "Commander",
+  "precon.deckMeta": "{type} · {code} · {count} cards",
+  "precon.purchasePrice": "Deck purchase price (EUR)",
+  "precon.purchasePriceHint":
+    "Optional. Split evenly across every card in the deck.",
+  "precon.submit": "Add {count} cards",
+  "precon.adding": "Adding deck…",
 
   "search.title": "Search cards",
   "search.description":
@@ -561,6 +597,7 @@ const nl: Record<MessageKey, string> = {
   "collection.description":
     "Jouw Magic: The Gathering collectie. Voeg kaarten toe via zoeken of detailpagina’s.",
   "collection.searchCards": "Zoek kaarten",
+  "collection.addPrecon": "Precon-deck toevoegen",
   "collection.statCards": "Kaarten",
   "collection.statUnique": "Uniek",
   "collection.statCollectionValue": "Collectiewaarde",
@@ -583,6 +620,41 @@ const nl: Record<MessageKey, string> = {
   "collection.paginationLabel": "Collectiepagina’s",
   "collection.prevPage": "Vorige",
   "collection.nextPage": "Volgende",
+
+  "precon.title": "Precon-deck toevoegen",
+  "precon.description":
+    "Zoek officiële preconstructed decks en voeg alle kaarten in één keer aan je collectie toe.",
+  "precon.back": "← Terug naar collectie",
+  "precon.searchLabel": "Zoek preconstructed decks",
+  "precon.searchPlaceholder": "Zoek op decknaam, setcode of type…",
+  "precon.searchHint":
+    "Officiële Commander-, starter-, Jumpstart- en andere preconstructed decks.",
+  "precon.idleTitle": "Zoek een deck",
+  "precon.idleDescription":
+    "Typ een decknaam zoals “Abzan Armor” of een setcode zoals TDC.",
+  "precon.searching": "Zoeken naar “{query}”…",
+  "precon.searchErrorTitle": "Zoeken mislukt",
+  "precon.searchFailed": "Kon decks niet zoeken. Probeer het opnieuw.",
+  "precon.emptyTitle": "Geen decks gevonden",
+  "precon.emptyDescription":
+    "Geen preconstructed decks gevonden voor “{query}”. Probeer een andere naam of setcode.",
+  "precon.loadingDeck": "Decklijst laden…",
+  "precon.fetchFailed": "Kon dat deck niet laden.",
+  "precon.notFound": "Dat preconstructed deck is niet gevonden.",
+  "precon.tooLarge": "Dit deck is te groot om in één keer toe te voegen.",
+  "precon.emptyDeck": "Dit deck heeft geen kaarten om toe te voegen.",
+  "precon.addFailed": "Kon het deck niet toevoegen. Probeer het opnieuw.",
+  "precon.addNone": "Geen van de kaarten in dit deck kon worden toegevoegd.",
+  "precon.added": "{count} kaarten van {name} toegevoegd.",
+  "precon.addedPartial":
+    "{added} kaarten van {name} toegevoegd. {skipped} printings konden niet worden gematcht.",
+  "precon.commanders": "Commander",
+  "precon.deckMeta": "{type} · {code} · {count} kaarten",
+  "precon.purchasePrice": "Aankoopprijs van het deck (EUR)",
+  "precon.purchasePriceHint":
+    "Optioneel. Wordt gelijk verdeeld over alle kaarten in het deck.",
+  "precon.submit": "{count} kaarten toevoegen",
+  "precon.adding": "Deck toevoegen…",
 
   "search.title": "Kaarten zoeken",
   "search.description":

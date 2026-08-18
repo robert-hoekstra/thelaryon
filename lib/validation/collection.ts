@@ -22,6 +22,13 @@ export const addCollectionItemSchema = z.object({
   purchaseDate: z.string().optional(),
 })
 
+export const addPreconDeckSchema = z.object({
+  fileName: z.string().trim().min(1).max(200),
+  condition: cardConditionSchema.default("NEAR_MINT"),
+  purchasePrice: z.number().nonnegative().optional(),
+  purchaseDate: z.string().optional(),
+})
+
 export const updateCollectionItemSchema = z.object({
   quantity: z.number().int().min(1).max(999).optional(),
   condition: cardConditionSchema.optional(),

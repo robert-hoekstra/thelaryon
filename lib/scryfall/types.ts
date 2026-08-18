@@ -92,6 +92,16 @@ export type ScryfallCardListResponse = {
   data: ScryfallCard[]
 }
 
+export type ScryfallCollectionIdentifier = {
+  id: string
+}
+
+export type ScryfallCollectionResponse = {
+  object: "list"
+  not_found?: ScryfallCollectionIdentifier[]
+  data: ScryfallCard[]
+}
+
 export type ScryfallSetListResponse = {
   object: "list"
   has_more: boolean

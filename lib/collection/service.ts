@@ -4,8 +4,9 @@ import { and, desc, eq } from "drizzle-orm"
 
 import { db } from "@/lib/db"
 import { collectionItems } from "@/lib/db/schema"
+import { splitPurchasePrice } from "@/lib/decks/map"
 import { getCardPrice } from "@/lib/pricing/price"
-import { getCardById } from "@/lib/scryfall/client"
+import { getCardById, getCardsByIds } from "@/lib/scryfall/client"
 import type {
   AddCollectionItemInput,
   CardCondition,
@@ -13,6 +14,7 @@ import type {
   CollectionItem,
   UpdateCollectionItemInput,
 } from "@/types/collection"
+import type { PreconDeck } from "@/types/deck"
 
 function toNumber(value: string | null): number | null {
   if (value == null) {
@@ -126,6 +128,79 @@ export async function addCollectionItem(
     .returning()
 
   return mapCollectionItem(row)
+}
+
+export type AddPreconDeckResult = {
+  addedCount: number
+  skippedCount: number
+  totalCards: number
+}
+
+export async function addPreconDeckToCollection(
+  deck: PreconDeck,
+  userId: string,
+  options: {
+    condition: CardCondition
+    purchasePrice?: number
+    purchaseDate?: string
+  },
+): Promise<AddPreconDeckResult> {
+  const purchaseDate = parseOptionalDate(options.purchaseDate)
+  const scryfallCards = await getCardsByIds(
+    deck.cards.map((card) => card.scryfallId),
+  )
+  const cardById = new Map(scryfallCards.map((card) => [card.id, card]))
+
+  const addable = deck.cards.filter((card) => cardById.has(card.scryfallId))
+  const skippedCount = deck.cards.length - addable.length
+  const unitPrices = splitPurchasePrice(
+    options.purchasePrice,
+    addable.map((card) => card.quantity),
+  )
+
+  if (addable.length === 0) {
+    return {
+      addedCount: 0,
+      skippedCount,
+      totalCards: deck.totalCards,
+    }
+  }
+
+  const rows = addable.map((item, index) => {
+    const card = cardById.get(item.scryfallId)
+    if (!card) {
+      throw new Error(`Missing Scryfall card ${item.scryfallId}`)
+    }
+
+    const currentPrice = getCardPrice(card, item.finish)
+    const purchasePrice = unitPrices[index]
+
+    return {
+      userId,
+      scryfallId: card.id,
+      name: card.name,
+      setCode: card.setCode,
+      setName: card.setName,
+      collectorNumber: card.collectorNumber,
+      quantity: item.quantity,
+      condition: options.condition,
+      finish: item.finish,
+      language: item.language,
+      purchasePrice: purchasePrice != null ? purchasePrice.toFixed(2) : null,
+      purchaseDate: purchaseDate ?? null,
+      currentPrice: currentPrice != null ? currentPrice.toFixed(2) : null,
+      imageSmall: card.image.small ?? null,
+      imageNormal: card.image.normal ?? null,
+    }
+  })
+
+  await db.insert(collectionItems).values(rows)
+
+  return {
+    addedCount: addable.reduce((sum, card) => sum + card.quantity, 0),
+    skippedCount,
+    totalCards: deck.totalCards,
+  }
 }
 
 export async function updateCollectionItem(

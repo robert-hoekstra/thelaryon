@@ -6,14 +6,22 @@ import { ensureAppUser } from "@/lib/auth/ensure-app-user"
 import { auth } from "@/lib/auth/server"
 import {
   addCollectionItem,
+  addPreconDeckToCollection,
   deleteCollectionItem,
   getCollectionItemById,
   updateCollectionItem,
 } from "@/lib/collection/service"
+import {
+  getPreconDeck,
+  PreconDeckNotFoundError,
+  PreconDeckTooLargeError,
+} from "@/lib/decks/service"
 import { getTranslator } from "@/lib/i18n/get-locale"
+import { MtgjsonApiError } from "@/lib/mtgjson/client"
 import { getDefaultCardPurchasePrice } from "@/lib/user/service"
 import {
   addCollectionItemSchema,
+  addPreconDeckSchema,
   updateCollectionItemSchema,
 } from "@/lib/validation/collection"
 
@@ -86,6 +94,99 @@ export async function addToCollectionAction(
     return {
       ok: false,
       message: t("action.addFailed"),
+    }
+  }
+}
+
+export async function addPreconDeckAction(
+  input: unknown,
+): Promise<ActionResult> {
+  const t = await getTranslator()
+  const user = await requireUserId()
+  if (!user.ok) {
+    return user
+  }
+
+  const parsed = addPreconDeckSchema.safeParse(input)
+
+  if (!parsed.success) {
+    return {
+      ok: false,
+      message: t("action.invalidCollectionData"),
+    }
+  }
+
+  try {
+    const deck = await getPreconDeck(parsed.data.fileName)
+
+    if (deck.totalCards === 0) {
+      return {
+        ok: false,
+        message: t("precon.emptyDeck"),
+      }
+    }
+
+    const result = await addPreconDeckToCollection(deck, user.userId, {
+      condition: parsed.data.condition,
+      purchasePrice: parsed.data.purchasePrice,
+      purchaseDate: parsed.data.purchaseDate,
+    })
+
+    if (result.addedCount === 0) {
+      return {
+        ok: false,
+        message: t("precon.addNone"),
+      }
+    }
+
+    revalidatePath("/collection")
+    revalidatePath("/")
+    revalidatePath("/binders", "layout")
+
+    if (result.skippedCount > 0) {
+      return {
+        ok: true,
+        message: t("precon.addedPartial", {
+          name: deck.name,
+          added: result.addedCount,
+          skipped: result.skippedCount,
+        }),
+      }
+    }
+
+    return {
+      ok: true,
+      message: t("precon.added", {
+        name: deck.name,
+        count: result.addedCount,
+      }),
+    }
+  } catch (error) {
+    if (error instanceof PreconDeckNotFoundError) {
+      return {
+        ok: false,
+        message: t("precon.notFound"),
+      }
+    }
+
+    if (error instanceof PreconDeckTooLargeError) {
+      return {
+        ok: false,
+        message: t("precon.tooLarge"),
+      }
+    }
+
+    if (error instanceof MtgjsonApiError) {
+      return {
+        ok: false,
+        message: t("precon.fetchFailed"),
+      }
+    }
+
+    console.error("addPreconDeckAction failed", error)
+    return {
+      ok: false,
+      message: t("precon.addFailed"),
     }
   }
 }

@@ -1,7 +1,6 @@
 import { NextResponse } from "next/server"
 
-import { ensureAppUser } from "@/lib/auth/ensure-app-user"
-import { auth } from "@/lib/auth/server"
+import { requireApiUserId } from "@/lib/auth/require-api-user"
 import {
   addCollectionItem,
   listCollectionItems,
@@ -10,25 +9,11 @@ import { getTranslator } from "@/lib/i18n/get-locale"
 import { ScryfallApiError } from "@/lib/scryfall/client"
 import { addCollectionItemSchema } from "@/lib/validation/collection"
 
-async function getAuthenticatedUserId() {
-  const { data: session } = await auth.getSession()
-
-  if (!session?.user) {
-    return null
-  }
-
-  return ensureAppUser({
-    id: session.user.id,
-    email: session.user.email,
-    name: session.user.name,
-  })
-}
-
 export async function GET() {
   const t = await getTranslator()
 
   try {
-    const userId = await getAuthenticatedUserId()
+    const userId = await requireApiUserId()
 
     if (!userId) {
       return NextResponse.json(
@@ -50,7 +35,7 @@ export async function GET() {
 
 export async function POST(request: Request) {
   const t = await getTranslator()
-  const userId = await getAuthenticatedUserId()
+  const userId = await requireApiUserId()
 
   if (!userId) {
     return NextResponse.json(

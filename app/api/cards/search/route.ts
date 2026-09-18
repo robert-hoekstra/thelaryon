@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server"
 import { z } from "zod"
 
+import { requireApiUserId } from "@/lib/auth/require-api-user"
 import { getTranslator } from "@/lib/i18n/get-locale"
 import { ScryfallApiError, searchCards } from "@/lib/scryfall/client"
 
@@ -10,6 +11,15 @@ const searchSchema = z.object({
 
 export async function GET(request: Request) {
   const t = await getTranslator()
+  const userId = await requireApiUserId()
+
+  if (!userId) {
+    return NextResponse.json(
+      { message: t("api.unauthorized") },
+      { status: 401 },
+    )
+  }
+
   const { searchParams } = new URL(request.url)
   const parsed = searchSchema.safeParse({
     q: searchParams.get("q") ?? "",

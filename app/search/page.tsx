@@ -6,7 +6,10 @@ import { getTranslator } from "@/lib/i18n/get-locale"
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslator()
-  return { title: t("search.title") }
+  return {
+    title: t("search.title"),
+    robots: { index: false, follow: false },
+  }
 }
 
 export const dynamic = "force-dynamic"

@@ -14,6 +14,12 @@ export default function proxy(request: NextRequest) {
     return NextResponse.next()
   }
 
+  // API routes handle auth themselves and should return JSON 401s,
+  // not HTML redirects to the sign-in page.
+  if (request.nextUrl.pathname.startsWith("/api/")) {
+    return NextResponse.next()
+  }
+
   return authMiddleware(request)
 }
 
@@ -27,5 +33,11 @@ export const config = {
     "/friends/:path*",
     "/profile",
     "/profile/:path*",
+    "/cards",
+    "/cards/:path*",
+    "/sets",
+    "/sets/:path*",
+    "/search",
+    "/search/:path*",
   ],
 }

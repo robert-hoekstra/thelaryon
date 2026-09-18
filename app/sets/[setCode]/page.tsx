@@ -32,9 +32,15 @@ export async function generateMetadata({
 
   try {
     const { set } = await getSetCompletionDetail(setCode, null)
-    return { title: t("setDetail.title", { name: set.name }) }
+    return {
+      title: t("setDetail.title", { name: set.name }),
+      robots: { index: false, follow: false },
+    }
   } catch {
-    return { title: t("sets.title") }
+    return {
+      title: t("sets.title"),
+      robots: { index: false, follow: false },
+    }
   }
 }
 

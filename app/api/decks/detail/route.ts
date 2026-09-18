@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server"
 import { z } from "zod"
 
+import { requireApiUserId } from "@/lib/auth/require-api-user"
 import {
   getPreconDeck,
   PreconDeckNotFoundError,
@@ -15,6 +16,15 @@ const detailSchema = z.object({
 
 export async function GET(request: Request) {
   const t = await getTranslator()
+  const userId = await requireApiUserId()
+
+  if (!userId) {
+    return NextResponse.json(
+      { message: t("api.unauthorized") },
+      { status: 401 },
+    )
+  }
+
   const { searchParams } = new URL(request.url)
   const parsed = detailSchema.safeParse({
     fileName: searchParams.get("fileName") ?? "",

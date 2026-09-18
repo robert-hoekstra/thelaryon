@@ -28,10 +28,12 @@ export async function generateMetadata({
     return {
       title: card.name,
       description: `${card.name} · ${card.setName} · #${card.collectorNumber}`,
+      robots: { index: false, follow: false },
     }
   } catch {
     return {
       title: t("card.metadataFallbackTitle"),
+      robots: { index: false, follow: false },
     }
   }
 }

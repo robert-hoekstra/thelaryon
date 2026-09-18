@@ -1,7 +1,6 @@
 import { NextResponse } from "next/server"
 
-import { ensureAppUser } from "@/lib/auth/ensure-app-user"
-import { auth } from "@/lib/auth/server"
+import { requireApiUserId } from "@/lib/auth/require-api-user"
 import {
   deleteCollectionItem,
   getCollectionItemById,
@@ -16,26 +15,12 @@ type RouteContext = {
   }>
 }
 
-async function getAuthenticatedUserId() {
-  const { data: session } = await auth.getSession()
-
-  if (!session?.user) {
-    return null
-  }
-
-  return ensureAppUser({
-    id: session.user.id,
-    email: session.user.email,
-    name: session.user.name,
-  })
-}
-
 export async function GET(_request: Request, context: RouteContext) {
   const t = await getTranslator()
   const { id } = await context.params
 
   try {
-    const userId = await getAuthenticatedUserId()
+    const userId = await requireApiUserId()
 
     if (!userId) {
       return NextResponse.json(
@@ -66,7 +51,7 @@ export async function GET(_request: Request, context: RouteContext) {
 export async function PATCH(request: Request, context: RouteContext) {
   const t = await getTranslator()
   const { id } = await context.params
-  const userId = await getAuthenticatedUserId()
+  const userId = await requireApiUserId()
 
   if (!userId) {
     return NextResponse.json(
@@ -118,7 +103,7 @@ export async function PATCH(request: Request, context: RouteContext) {
 export async function DELETE(_request: Request, context: RouteContext) {
   const t = await getTranslator()
   const { id } = await context.params
-  const userId = await getAuthenticatedUserId()
+  const userId = await requireApiUserId()
 
   if (!userId) {
     return NextResponse.json(

@@ -14,7 +14,10 @@ import {
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslator()
-  return { title: t("sets.title") }
+  return {
+    title: t("sets.title"),
+    robots: { index: false, follow: false },
+  }
 }
 
 export const dynamic = "force-dynamic"

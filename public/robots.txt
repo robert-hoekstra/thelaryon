@@ -1,0 +1,9 @@
+User-agent: *
+Disallow: /api/
+Disallow: /cards
+Disallow: /sets
+Disallow: /search
+Disallow: /collection
+Disallow: /binders
+Disallow: /friends
+Disallow: /profile

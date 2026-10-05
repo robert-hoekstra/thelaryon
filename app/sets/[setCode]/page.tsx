@@ -7,7 +7,7 @@ import { SetCompareSelector } from "@/components/sets/set-compare-selector"
 import { SetComparisonView } from "@/components/sets/set-comparison-view"
 import { SetProgressBar } from "@/components/sets/set-progress-bar"
 import { ensureAppUser } from "@/lib/auth/ensure-app-user"
-import { auth } from "@/lib/auth/server"
+import { requirePageSession } from "@/lib/auth/require-page-session"
 import { listFriendships } from "@/lib/friends/service"
 import { createTranslator } from "@/lib/i18n/dictionaries"
 import { getLocale, getTranslator } from "@/lib/i18n/get-locale"
@@ -52,18 +52,15 @@ export default async function SetDetailPage({
 }: SetDetailPageProps) {
   const { setCode } = await params
   const { compare: compareFriendId } = await searchParams
-  const { data: session } = await auth.getSession()
+  const session = await requirePageSession()
   const locale = await getLocale()
   const t = createTranslator(locale)
 
-  let userId: string | null = null
-  if (session?.user) {
-    userId = await ensureAppUser({
-      id: session.user.id,
-      email: session.user.email,
-      name: session.user.name,
-    })
-  }
+  const userId = await ensureAppUser({
+    id: session.user.id,
+    email: session.user.email,
+    name: session.user.name,
+  })
 
   let completion
   try {

@@ -3,10 +3,14 @@ import Link from "next/link"
 import { DesktopNavigation } from "./desktop-navigation"
 
 type AppHeaderProps = {
+  isAuthenticated?: boolean
   pendingFriendRequests?: number
 }
 
-export function AppHeader({ pendingFriendRequests = 0 }: AppHeaderProps) {
+export function AppHeader({
+  isAuthenticated = false,
+  pendingFriendRequests = 0,
+}: AppHeaderProps) {
   return (
     <header className="sticky top-0 z-30 border-b border-ink/10 bg-surface/90 backdrop-blur-md">
       <div className="mx-auto flex h-14 max-w-6xl items-center justify-between gap-3 px-4">
@@ -27,7 +31,10 @@ export function AppHeader({ pendingFriendRequests = 0 }: AppHeaderProps) {
             </span>
           </span>
         </Link>
-        <DesktopNavigation pendingFriendRequests={pendingFriendRequests} />
+        <DesktopNavigation
+          isAuthenticated={isAuthenticated}
+          pendingFriendRequests={pendingFriendRequests}
+        />
       </div>
       <div className="mana-ribbon" aria-hidden />
     </header>

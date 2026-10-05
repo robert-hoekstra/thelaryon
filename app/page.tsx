@@ -80,26 +80,36 @@ export default async function HomePage() {
             : t("home.tagline")}
         </p>
         <div className="flex flex-wrap gap-3 pt-2">
-          <Link
-            href="/search"
-            className="inline-flex items-center justify-center rounded-full bg-accent px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-accent/85"
-          >
-            {t("home.searchCards")}
-          </Link>
           {session?.user ? (
-            <Link
-              href="/collection"
-              className="inline-flex items-center justify-center rounded-full border border-ink/25 bg-surface-elevated px-5 py-2.5 text-sm font-semibold text-ink transition hover:border-accent/50 hover:bg-surface-elevated/80"
-            >
-              {t("home.viewCollection")}
-            </Link>
+            <>
+              <Link
+                href="/search"
+                className="inline-flex items-center justify-center rounded-full bg-accent px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-accent/85"
+              >
+                {t("home.searchCards")}
+              </Link>
+              <Link
+                href="/collection"
+                className="inline-flex items-center justify-center rounded-full border border-ink/25 bg-surface-elevated px-5 py-2.5 text-sm font-semibold text-ink transition hover:border-accent/50 hover:bg-surface-elevated/80"
+              >
+                {t("home.viewCollection")}
+              </Link>
+            </>
           ) : (
-            <Link
-              href="/auth/sign-up"
-              className="inline-flex items-center justify-center rounded-full border border-ink/25 bg-surface-elevated px-5 py-2.5 text-sm font-semibold text-ink transition hover:border-accent/50 hover:bg-surface-elevated/80"
-            >
-              {t("home.createAccount")}
-            </Link>
+            <>
+              <Link
+                href="/auth/sign-in"
+                className="inline-flex items-center justify-center rounded-full bg-accent px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-accent/85"
+              >
+                {t("card.signIn")}
+              </Link>
+              <Link
+                href="/auth/sign-up"
+                className="inline-flex items-center justify-center rounded-full border border-ink/25 bg-surface-elevated px-5 py-2.5 text-sm font-semibold text-ink transition hover:border-accent/50 hover:bg-surface-elevated/80"
+              >
+                {t("home.createAccount")}
+              </Link>
+            </>
           )}
         </div>
       </section>
@@ -159,41 +169,41 @@ export default async function HomePage() {
         />
       ) : null}
 
-      <section className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-        {[
-          {
-            title: t("home.searchTitle"),
-            body: t("home.searchBody"),
-            href: "/search",
-            tint: "hover:ring-mana-blue/25",
-          },
-          {
-            title: t("home.collectionTitle"),
-            body: session?.user
-              ? t("home.collectionBodyLoggedIn")
-              : t("home.collectionBodyLoggedOut"),
-            href: session?.user ? "/collection" : "/auth/sign-in",
-            tint: "hover:ring-mana-green/25",
-          },
-          {
-            title: t("home.setsTitle"),
-            body: t("home.setsBody"),
-            href: "/sets",
-            tint: "hover:ring-gold/25",
-          },
-        ].map((item) => (
-          <Link
-            key={item.title}
-            href={item.href}
-            className={`rounded-2xl bg-surface/80 p-5 ring-1 ring-ink/10 transition hover:bg-surface-elevated ${item.tint}`}
-          >
-            <h2 className="text-sm font-semibold text-ink">{item.title}</h2>
-            <p className="mt-2 text-sm leading-relaxed text-ink-soft">
-              {item.body}
-            </p>
-          </Link>
-        ))}
-      </section>
+      {session?.user ? (
+        <section className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+          {[
+            {
+              title: t("home.searchTitle"),
+              body: t("home.searchBody"),
+              href: "/search",
+              tint: "hover:ring-mana-blue/25",
+            },
+            {
+              title: t("home.collectionTitle"),
+              body: t("home.collectionBodyLoggedIn"),
+              href: "/collection",
+              tint: "hover:ring-mana-green/25",
+            },
+            {
+              title: t("home.setsTitle"),
+              body: t("home.setsBody"),
+              href: "/sets",
+              tint: "hover:ring-gold/25",
+            },
+          ].map((item) => (
+            <Link
+              key={item.title}
+              href={item.href}
+              className={`rounded-2xl bg-surface/80 p-5 ring-1 ring-ink/10 transition hover:bg-surface-elevated ${item.tint}`}
+            >
+              <h2 className="text-sm font-semibold text-ink">{item.title}</h2>
+              <p className="mt-2 text-sm leading-relaxed text-ink-soft">
+                {item.body}
+              </p>
+            </Link>
+          ))}
+        </section>
+      ) : null}
     </div>
   )
 }

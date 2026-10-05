@@ -8,14 +8,20 @@ import { NavBadge } from "@/components/layout/nav-badge"
 import { cn } from "@/lib/utils"
 
 type MobileNavigationProps = {
+  isAuthenticated?: boolean
   pendingFriendRequests?: number
 }
 
 export function MobileNavigation({
+  isAuthenticated = false,
   pendingFriendRequests = 0,
 }: MobileNavigationProps) {
   const pathname = usePathname()
   const t = useTranslations()
+
+  if (!isAuthenticated) {
+    return null
+  }
 
   const navItems = [
     { href: "/", label: t("nav.home") },

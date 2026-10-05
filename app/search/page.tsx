@@ -1,7 +1,7 @@
 import type { Metadata } from "next"
 
 import { CardSearch } from "@/components/cards/card-search"
-import { auth } from "@/lib/auth/server"
+import { requirePageSession } from "@/lib/auth/require-page-session"
 import { getTranslator } from "@/lib/i18n/get-locale"
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -23,7 +23,7 @@ type SearchPageProps = {
 export default async function SearchPage({ searchParams }: SearchPageProps) {
   const params = await searchParams
   const t = await getTranslator()
-  const { data: session } = await auth.getSession()
+  await requirePageSession()
 
   return (
     <div className="space-y-6">
@@ -38,7 +38,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
 
       <CardSearch
         initialQuery={params.q?.trim() ?? ""}
-        isAuthenticated={Boolean(session?.user)}
+        isAuthenticated
       />
     </div>
   )

@@ -8,14 +8,38 @@ import { NavBadge } from "@/components/layout/nav-badge"
 import { cn } from "@/lib/utils"
 
 type DesktopNavigationProps = {
+  isAuthenticated?: boolean
   pendingFriendRequests?: number
 }
 
 export function DesktopNavigation({
+  isAuthenticated = false,
   pendingFriendRequests = 0,
 }: DesktopNavigationProps) {
   const pathname = usePathname()
   const t = useTranslations()
+
+  if (!isAuthenticated) {
+    return (
+      <nav
+        aria-label={t("nav.desktopAria")}
+        className="hidden items-center gap-2 md:flex"
+      >
+        <Link
+          href="/auth/sign-in"
+          className="rounded-full px-3 py-1.5 text-sm font-medium text-ink/70 transition-colors hover:bg-surface-elevated hover:text-ink"
+        >
+          {t("card.signIn")}
+        </Link>
+        <Link
+          href="/auth/sign-up"
+          className="rounded-full bg-accent px-3 py-1.5 text-sm font-semibold text-white transition hover:bg-accent/85"
+        >
+          {t("card.signUp")}
+        </Link>
+      </nav>
+    )
+  }
 
   const navItems = [
     { href: "/", label: t("nav.home") },

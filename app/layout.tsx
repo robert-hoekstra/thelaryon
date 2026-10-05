@@ -48,6 +48,7 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function RootLayout({ children }: LayoutProps<"/">) {
   const locale = await getLocale()
   const { data: session } = await auth.getSession()
+  const isAuthenticated = Boolean(session?.user)
   let pendingFriendRequests = 0
 
   if (session?.user) {
@@ -68,11 +69,23 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
         <CursorSearchlight />
         <LocaleProvider locale={locale}>
           <div className="relative z-10 flex min-h-full flex-1 flex-col">
-            <AppHeader pendingFriendRequests={pendingFriendRequests} />
-            <main className="mx-auto w-full max-w-6xl flex-1 px-4 pb-24 pt-6 md:pb-10 md:pt-8">
+            <AppHeader
+              isAuthenticated={isAuthenticated}
+              pendingFriendRequests={pendingFriendRequests}
+            />
+            <main
+              className={
+                isAuthenticated
+                  ? "mx-auto w-full max-w-6xl flex-1 px-4 pb-24 pt-6 md:pb-10 md:pt-8"
+                  : "mx-auto w-full max-w-6xl flex-1 px-4 pb-10 pt-6 md:pt-8"
+              }
+            >
               {children}
             </main>
-            <MobileNavigation pendingFriendRequests={pendingFriendRequests} />
+            <MobileNavigation
+              isAuthenticated={isAuthenticated}
+              pendingFriendRequests={pendingFriendRequests}
+            />
           </div>
           <Toaster />
         </LocaleProvider>
